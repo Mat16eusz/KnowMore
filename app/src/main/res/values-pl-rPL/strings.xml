@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Znamy się?</string>
+    <string name="question_view_1">Które z tych zwierząt lubisz najbardziej?</string>
+    <string name="answer_button_1.1">Kot</string>
+    <string name="answer_button_1.2">Pies</string>
+    <string name="answer_button_1.3">Chomik</string>
+    <string name="answer_button_1.4">Ryby</string>
+</resources>
