@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Know more?</string>
+    <string name="facebook_app_id">1286857871787689</string>
+    <string name="fb_login_protocol_scheme">fb1286857871787689</string>
     <string name="question_view_1">Which of these animals do you like the most?</string>
     <string name="answer_button_1.1">Cat</string>
     <string name="answer_button_1.2">Dog</string>
