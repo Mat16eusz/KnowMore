@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KnowMore">
         <activity
-            android:name=".Questions"
+            android:name=".QuestionsActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

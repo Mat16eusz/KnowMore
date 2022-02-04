@@ -24,6 +24,8 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+//TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
+//import com.facebook.gamingservices.FriendFinderDialog;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -37,19 +39,20 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.mateusz.jasiak.knowmore.databinding.ActivityMainBinding;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
+    //private static final String TAG = "Test";
+    //----------------------------------------------------------------------------------------------
     ActivityMainBinding binding;
     GoogleSignInClient mGoogleSignInClient;
 
     //----------------------------------------------------------------------------------------------
+    //Google login
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //------------------------------------------------------------------------------------------
+        //Facebook login
 
         loginButton = findViewById(R.id.login_button);
 
@@ -101,15 +105,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //------------------------------------------------------------------------------------------
+        //Przechodzenie do QuestionsActivity
 
         Button twoActivity = findViewById(R.id.twoActivity);
 
         twoActivity.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, Questions.class);
+            Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
 
             MainActivity.this.startActivity(intent);
         });
     }
+
+    //----------------------------------------------------------------------------------------------
+    //Google login
 
     ActivityResultLauncher<Intent> startActivityForResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -174,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //----------------------------------------------------------------------------------------------
+    //Facebook login
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -208,4 +217,29 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         accessTokenTracker.stopTracking();
     }
+
+    //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
+    /*public void Test(View view) {
+        FriendFinderDialog dialog = new FriendFinderDialog(this);
+        // if we want to get notified when the dialog is closed
+        // we can register a Callback
+        dialog.registerCallback(
+                this.callbackManager,
+                new FacebookCallback<FriendFinderDialog.Result>() {
+                    @Override
+                    public void onSuccess(FriendFinderDialog.Result friendFinderResult) {
+                        Log.e(MainActivity.TAG, "Player Finder Dialog closed");
+                    }
+
+                    @Override
+                    public void onCancel() {}
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Log.e("GamingServicesFBCallback", exception.toString());
+                    }
+                });
+        // open the dialog
+        dialog.show();
+    }*/
 }
