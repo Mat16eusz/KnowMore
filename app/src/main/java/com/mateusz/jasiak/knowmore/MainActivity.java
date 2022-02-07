@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -42,24 +43,36 @@ import com.mateusz.jasiak.knowmore.databinding.ActivityMainBinding;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
     //private static final String TAG = "Test";
     //----------------------------------------------------------------------------------------------
+    //Google login
     ActivityMainBinding binding;
     GoogleSignInClient mGoogleSignInClient;
-
     //----------------------------------------------------------------------------------------------
-    //Google login
-
+    //Retrofit
+    private TextView nameWithAPI;
+    //----------------------------------------------------------------------------------------------
+    //Facebook login
     private CallbackManager callbackManager;
     private LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //----------------------------------------------------------------------------------------------
+        //Google login
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -80,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
 
         //------------------------------------------------------------------------------------------
         //Facebook login
-
         loginButton = findViewById(R.id.login_button);
 
         callbackManager = CallbackManager.Factory.create();
@@ -105,8 +117,57 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //------------------------------------------------------------------------------------------
-        //Przechodzenie do QuestionsActivity
+        //Retrofit łączenie. Docelowo zamienić adres z localhost na domenę
+        nameWithAPI = findViewById(R.id.nameWithAPI);
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:3000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
+
+        Call<List<PlayersDataAPI>> call = jsonKnowMoreAPI.getPlayersData();
+        call.enqueue(new Callback<List<PlayersDataAPI>>() {
+            @Override
+            public void onResponse(Call<List<PlayersDataAPI>> call, Response<List<PlayersDataAPI>> response) {
+                if (response.code() > 399) {
+                    finish();
+                } else {
+                    List<PlayersDataAPI> playersDataAPI = response.body();
+
+                    for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
+                        nameWithAPI.setText(playersDataAPIs.getName() + '\n');
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PlayersDataAPI>> call, Throwable t) {
+
+            }
+        });
+
+        PlayersDataAPI playersDataAPI = new PlayersDataAPI("Test3", "Test3", "3");
+        Call<PlayersDataAPI> call1 = jsonKnowMoreAPI.addPlayer(playersDataAPI);
+        call1.enqueue(new Callback<PlayersDataAPI>() {
+            @Override
+            public void onResponse(Call<PlayersDataAPI> call1, Response<PlayersDataAPI> response) {
+                if (!response.isSuccessful()) {
+                    return;
+                }
+
+                PlayersDataAPI playersDataAPIResponse = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<PlayersDataAPI> call1, Throwable t) {
+
+            }
+        });
+
+        //------------------------------------------------------------------------------------------
+        //Przechodzenie do QuestionsActivity
         Button twoActivity = findViewById(R.id.twoActivity);
 
         twoActivity.setOnClickListener(view -> {
