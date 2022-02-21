@@ -2,25 +2,37 @@ package com.mateusz.jasiak.knowmore;
 
 public class PlayersDataAPI {
 
-    private String name;
-    private String surname;
     private String id;
+    private String idSocialMedia;
+    private String firstName;
+    private String surname;
+    private String name;
 
-    public PlayersDataAPI(String name, String surname, String id) {
-        this.name = name;
-        this.surname = surname;
+    public PlayersDataAPI(String id, String idSocialMedia, String firstName, String surname, String name) {
         this.id = id;
+        this.idSocialMedia = idSocialMedia;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.name = name;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
+    }
+
+    public String getIdSocialMedia() {
+        return idSocialMedia;
+    }
+
+    public String getFirstName() {
+        return firstName;
     }
 
     public String getSurname() {
         return surname;
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 }
