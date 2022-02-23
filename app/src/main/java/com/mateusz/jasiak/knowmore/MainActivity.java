@@ -56,9 +56,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    //----------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------
     //Google login
-    private Button signOut;
     ActivityMainBinding binding;
     GoogleSignInClient mGoogleSignInClient;
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
@@ -72,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        signOut = findViewById(R.id.sign_out_button);
-
         //------------------------------------------------------------------------------------------
         //Google login
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -86,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        Toast.makeText(this, R.string.logged_in, Toast.LENGTH_SHORT).show();
 
         //Retrofit łączenie.
         //getPlayers("1");
@@ -129,11 +128,19 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
 
                 //Przechodzenie do StartActivity
+                saveData("false");
                 Intent intent = new Intent(MainActivity.this, StartActivity.class);
                 MainActivity.this.startActivity(intent);
                 break;
             // ...
         }
+    }
+
+    private void saveData(String logged) {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("LOGGED_KEY", logged);
+        editor.apply();
     }
 
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.

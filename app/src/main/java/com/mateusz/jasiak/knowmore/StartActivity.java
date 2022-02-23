@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -74,6 +75,11 @@ public class StartActivity extends AppCompatActivity {
             startActivityForResult.launch(signInIntent);
         });
 
+        if (loadData().equals("true")) {
+            Intent intent = new Intent(StartActivity.this, MainActivity.class);
+            StartActivity.this.startActivity(intent);
+        }
+
         //------------------------------------------------------------------------------------------
         //Facebook login
         /*loginButton = findViewById(R.id.login_button);
@@ -126,14 +132,13 @@ public class StartActivity extends AppCompatActivity {
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
 
-                Toast.makeText(this, R.string.logged_in, Toast.LENGTH_SHORT).show();
-
                 //Wysyłanie na API
                 if (!postPlayerAfterTheFirstLogin("uuid", personId, personGivenName, personFamilyName, personName)) {
 
                 }
 
                 //Przechodzenie do MainActivity
+                saveData("true");
                 Intent intent = new Intent(StartActivity.this, MainActivity.class);
                 StartActivity.this.startActivity(intent);
             }
@@ -302,5 +307,19 @@ public class StartActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void saveData(String logged) {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("LOGGED_KEY", logged);
+        editor.apply();
+    }
+
+    private String loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        String logged = sharedPreferences.getString("LOGGED_KEY", "false");
+
+        return logged;
     }
 }
