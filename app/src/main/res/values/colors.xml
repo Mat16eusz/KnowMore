@@ -13,4 +13,5 @@
     <color name="colorAccent">#FFBA5849</color>
 
     <color name="colorTheme">#FF303030</color>
+    <color name="textColorHintLight">#999999</color>
 </resources>

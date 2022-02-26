@@ -9,4 +9,5 @@
     <string name="sign_out">Wyloguj się</string>
     <string name="logged_in">Zalogowano!</string>
     <string name="logged_out">Wylogowano!</string>
+    <string name="invite_a_friend">Zaproś znajomego</string>
 </resources>

@@ -1,51 +1,30 @@
 package com.mateusz.jasiak.knowmore;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
 //import com.facebook.gamingservices.FriendFinderDialog;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.mateusz.jasiak.knowmore.databinding.ActivityMainBinding;
-import com.mateusz.jasiak.knowmore.databinding.ActivityStartBinding;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    //------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     //Google login
     ActivityMainBinding binding;
     GoogleSignInClient mGoogleSignInClient;
@@ -65,6 +44,15 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     //Retrofit
     //private TextView nameWithAPI; //TODO: Usunąć.
+    //----------------------------------------------------------------------------------------------
+    //Rozwijana lista z graczami
+    AutoCompleteTextView autoCompleteTextView;
+    ArrayList<String> players = new ArrayList<String>();
+
+    ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViewArrayList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapterRecyclerView;
+    private RecyclerView.LayoutManager layoutManagerRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +73,16 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
         Toast.makeText(this, R.string.logged_in, Toast.LENGTH_SHORT).show();
+
+        //------------------------------------------------------------------------------------------
+        //Rozwijana lista z graczami
+        getPlayers(); //TODO: Zrobić odświeżanie.
+
+        autoCompleteTextView = findViewById(R.id.editTextTextPersonName);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, players);
+
+        autoCompleteTextView.setAdapter(arrayAdapter);
 
         //Retrofit łączenie.
         //getPlayers("1");
@@ -141,6 +139,57 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("LOGGED_KEY", logged);
         editor.apply();
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //Retrofit łączenie. Docelowo zamienić adres z localhost na domenę. Wyodrębnić na funkcję itp.
+    void getPlayers() {
+
+        //TextView nameWithAPI = findViewById(R.id.nameWithAPI); //TODO: Usunąć.
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:3000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
+
+        Call<List<PlayersDataAPI>> call = jsonKnowMoreAPI.getPlayersData();
+        call.enqueue(new Callback<List<PlayersDataAPI>>() {
+            @Override
+            public void onResponse(Call<List<PlayersDataAPI>> call, Response<List<PlayersDataAPI>> response) {
+                if (response.code() > 399) {
+                    finish();
+                } else {
+                    List<PlayersDataAPI> playersDataAPI = response.body();
+
+                    for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
+                        //nameWithAPI.setText(playersDataAPIs.getName() + '\n'); //TODO: Usunąć.
+                        players.add(playersDataAPIs.getName());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PlayersDataAPI>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    //------------------------------------------------------------------------------------------
+    //Rozwijana lista z graczami
+    public void addPlayerToListFriends(View view) {
+
+        playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(autoCompleteTextView.getText().toString()));
+
+        recyclerView = findViewById(R.id.playerFriendRecyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManagerRecyclerView = new LinearLayoutManager(this);
+        adapterRecyclerView = new PlayerFriendAdapterRecyclerView(playerFriendRecyclerViewArrayList);
+
+        recyclerView.setLayoutManager(layoutManagerRecyclerView);
+        recyclerView.setAdapter(adapterRecyclerView);
     }
 
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
