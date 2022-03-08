@@ -28,6 +28,7 @@ public class PlayerFriendAdapterRecyclerView extends RecyclerView.Adapter<Player
         PlayerFriendRecyclerView currentItem = playerFriendRecyclerViews.get(i);
 
         playerFriendViewHolder.nameRecyclerView.setText(currentItem.getNameRecyclerView());
+        playerFriendViewHolder.idSocialMedia.setText(currentItem.getIdSocialMediaRecyclerView());
         //TODO: Docelowo dodać jeszcze id i awatar.
     }
 
@@ -36,7 +37,7 @@ public class PlayerFriendAdapterRecyclerView extends RecyclerView.Adapter<Player
         return playerFriendRecyclerViews.size();
     }
 
-    public ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViews;
+    public ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViews; //TODO: Przenieść do góry
 
     public PlayerFriendAdapterRecyclerView(ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViewArrayList) {
         playerFriendRecyclerViews = playerFriendRecyclerViewArrayList;
@@ -44,11 +45,13 @@ public class PlayerFriendAdapterRecyclerView extends RecyclerView.Adapter<Player
 
     public static class PlayerFriendViewHolder extends RecyclerView.ViewHolder {
 
+        public TextView idSocialMedia;
         public TextView nameRecyclerView;
 
         public PlayerFriendViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            idSocialMedia = itemView.findViewById(R.id.idSocialMediaRecyclerView);
             nameRecyclerView = itemView.findViewById(R.id.nameRecyclerView);
             //TODO: Docelowo dodać jeszcze id i awatar.
         }

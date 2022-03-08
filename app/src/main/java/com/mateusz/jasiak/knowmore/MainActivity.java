@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
                     for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
                         //nameWithAPI.setText(playersDataAPIs.getName() + '\n'); //TODO: Usunąć.
-                        players.add(playersDataAPIs.getName());
+                        players.add(playersDataAPIs.getName() + "#" + playersDataAPIs.getIdSocialMedia() + "#");
                     }
                 }
             }
@@ -177,19 +177,64 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     //Rozwijana lista z graczami
     public void addPlayerToListFriends(View view) {
 
-        playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(autoCompleteTextView.getText().toString()));
+        try {
+            String text;
+            String idSocialMedia = "";
+            String name = "";
+            int i = 0;
+            int j;
+            int counterIdSocialMedia = 0;
 
-        recyclerView = findViewById(R.id.playerFriendRecyclerView);
-        recyclerView.setHasFixedSize(true);
-        layoutManagerRecyclerView = new LinearLayoutManager(this);
-        adapterRecyclerView = new PlayerFriendAdapterRecyclerView(playerFriendRecyclerViewArrayList);
+            //TODO: Dodać funkcję aby po ponownym uruchomieniu użytkownicy byli w RecyclerView.
+            if (!autoCompleteTextView.getText().toString().equals("")) {
+                text = autoCompleteTextView.getText().toString();
+                while (!(text.charAt(i) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
+                    i++;
+                }
+                name = text.substring(0, i);
+                j = i + 1;
+                while (!(text.charAt(j) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
+                    j++;
+                }
+                idSocialMedia = text.substring(i + 1, j);
 
-        recyclerView.setLayoutManager(layoutManagerRecyclerView);
-        recyclerView.setAdapter(adapterRecyclerView);
+                if (playerFriendRecyclerViewArrayList.size() == 0) {
+                    playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name));
+
+                    recyclerView = findViewById(R.id.playerFriendRecyclerView);
+                    recyclerView.setHasFixedSize(true);
+                    layoutManagerRecyclerView = new LinearLayoutManager(this);
+                    adapterRecyclerView = new PlayerFriendAdapterRecyclerView(playerFriendRecyclerViewArrayList);
+
+                    recyclerView.setLayoutManager(layoutManagerRecyclerView);
+                    recyclerView.setAdapter(adapterRecyclerView);
+                } else {
+                    for (i = 0; i < playerFriendRecyclerViewArrayList.size(); i++) {
+                        if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
+                            counterIdSocialMedia++;
+                        }
+                    }
+
+                    if (counterIdSocialMedia == 0) {
+                        playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name));
+
+                        recyclerView = findViewById(R.id.playerFriendRecyclerView);
+                        recyclerView.setHasFixedSize(true);
+                        layoutManagerRecyclerView = new LinearLayoutManager(this);
+                        adapterRecyclerView = new PlayerFriendAdapterRecyclerView(playerFriendRecyclerViewArrayList);
+
+                        recyclerView.setLayoutManager(layoutManagerRecyclerView);
+                        recyclerView.setAdapter(adapterRecyclerView);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.wrong_name, Toast.LENGTH_LONG).show();
+        }
     }
 
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.

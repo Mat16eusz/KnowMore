@@ -3,11 +3,12 @@ package com.mateusz.jasiak.knowmore;
 import android.net.Uri;
 
 public class PlayerFriendRecyclerView {
-    private Uri avatar;
+    private Uri avatar; //TODO: Usunąć jeśli nie będzie wykorzystywane
     private String idSocialMediaRecyclerView;
     private String nameRecyclerView;
 
-    public PlayerFriendRecyclerView(String nameRecyclerView) {
+    public PlayerFriendRecyclerView(String idSocialMediaRecyclerView, String nameRecyclerView) {
+        this.idSocialMediaRecyclerView = idSocialMediaRecyclerView;
         this.nameRecyclerView = nameRecyclerView;
     }
 
@@ -18,6 +19,7 @@ public class PlayerFriendRecyclerView {
         this.nameRecyclerView = nameRecyclerView;
     }*/
 
+    //TODO: Usunąć jeśli nie będzie wykorzystywane
     public Uri getAvatar() {
         return avatar;
     }

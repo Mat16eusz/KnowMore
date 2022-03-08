@@ -10,4 +10,5 @@
     <string name="logged_in">Zalogowano!</string>
     <string name="logged_out">Wylogowano!</string>
     <string name="invite_a_friend">Zaproś znajomego</string>
+    <string name="wrong_name">Podałeś złą nazwę użytkonika</string>
 </resources>
