@@ -22,8 +22,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mateusz.jasiak.knowmore.databinding.ActivityMainBinding;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, players);
 
         autoCompleteTextView.setAdapter(arrayAdapter);
+
+        loadData();
 
         //Retrofit łączenie.
         //getPlayers("1");
@@ -232,9 +237,35 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+            saveData();
         } catch (Exception e) {
             Toast.makeText(this, R.string.wrong_name, Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("player_friend", null);
+        Type type = new TypeToken<ArrayList<PlayerFriendRecyclerView>>() {}.getType();
+
+        playerFriendRecyclerViewArrayList = gson.fromJson(json, type);
+        if (playerFriendRecyclerViewArrayList == null) {
+            playerFriendRecyclerViewArrayList = new ArrayList<>();
+        }
+    }
+
+    private void saveData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(playerFriendRecyclerViewArrayList);
+
+        editor.putString("player_friend", json);
+        editor.apply();
+        Toast.makeText(this, "Saved Array List to Shared preferences. ", Toast.LENGTH_SHORT).show();
     }
 
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
