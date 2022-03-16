@@ -183,6 +183,14 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(layoutManagerRecyclerView);
         recyclerView.setAdapter(adapterRecyclerView);
+
+        adapterRecyclerView.setOnItemClickListener(new PlayerFriendAdapterRecyclerView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
     }
 
     public void addPlayerToListFriends(View view) {

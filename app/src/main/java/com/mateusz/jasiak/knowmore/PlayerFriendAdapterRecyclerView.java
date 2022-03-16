@@ -11,17 +11,38 @@ import java.util.ArrayList;
 public class PlayerFriendAdapterRecyclerView extends RecyclerView.Adapter<PlayerFriendAdapterRecyclerView.PlayerFriendViewHolder> {
 
     private ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViews;
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        onItemClickListener = listener;
+    }
 
     public static class PlayerFriendViewHolder extends RecyclerView.ViewHolder {
 
         public TextView idSocialMedia;
         public TextView nameRecyclerView;
 
-        public PlayerFriendViewHolder(View itemView) {
+        public PlayerFriendViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             idSocialMedia = itemView.findViewById(R.id.idSocialMediaRecyclerView);
             nameRecyclerView = itemView.findViewById(R.id.nameRecyclerView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -32,7 +53,7 @@ public class PlayerFriendAdapterRecyclerView extends RecyclerView.Adapter<Player
     @Override
     public PlayerFriendViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.player_friend, viewGroup, false);
-        PlayerFriendViewHolder playerFriendViewHolder = new PlayerFriendViewHolder(view);
+        PlayerFriendViewHolder playerFriendViewHolder = new PlayerFriendViewHolder(view, onItemClickListener);
 
         return playerFriendViewHolder;
     }
