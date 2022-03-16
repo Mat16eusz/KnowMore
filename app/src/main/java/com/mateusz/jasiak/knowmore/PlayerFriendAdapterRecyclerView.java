@@ -4,7 +4,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -25,12 +28,14 @@ public class PlayerFriendAdapterRecyclerView extends RecyclerView.Adapter<Player
 
         public TextView idSocialMedia;
         public TextView nameRecyclerView;
+        public ImageView avatar;
 
         public PlayerFriendViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             idSocialMedia = itemView.findViewById(R.id.idSocialMediaRecyclerView);
             nameRecyclerView = itemView.findViewById(R.id.nameRecyclerView);
+            avatar = itemView.findViewById(R.id.avatar);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,6 +69,9 @@ public class PlayerFriendAdapterRecyclerView extends RecyclerView.Adapter<Player
 
         holder.idSocialMedia.setText(currentItem.getIdSocialMediaRecyclerView());
         holder.nameRecyclerView.setText(currentItem.getNameRecyclerView());
+        //TODO: Jeśli jest null dodać na sztywno awatar
+        //TODO: Update w API adresu do awataru -> obecnie gdy użytkownik zmieni awatar na API pozoostaje link z pierwszego logowania
+        Picasso.get().load("https://lh3.googleusercontent.com" + currentItem.getAvatar()).into(holder.avatar);
     }
 
     @Override

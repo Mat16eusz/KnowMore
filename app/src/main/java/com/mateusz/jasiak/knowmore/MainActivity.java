@@ -88,16 +88,6 @@ public class MainActivity extends AppCompatActivity {
 
         loadData();
         buildRecyclerView();
-
-        //------------------------------------------------------------------------------------------
-        //Przechodzenie do QuestionsActivity
-        /*Button questionsActivity = findViewById(R.id.questionsActivity);
-
-        questionsActivity.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
-
-            MainActivity.this.startActivity(intent);
-        });*/
     }
 
     private void signOut() {
@@ -105,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // ...
+
                     }
                 });
     }
@@ -115,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // ...
+
                     }
                 });
     }
@@ -161,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     List<PlayersDataAPI> playersDataAPI = response.body();
 
                     for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
-                        players.add(playersDataAPIs.getName() + "#" + playersDataAPIs.getIdSocialMedia() + "#");
+                        players.add(playersDataAPIs.getName() + "#" + playersDataAPIs.getIdSocialMedia() + "#" + playersDataAPIs.getPersonPhoto());
                     }
                 }
             }
@@ -198,12 +188,11 @@ public class MainActivity extends AppCompatActivity {
             String text;
             String idSocialMedia = "";
             String name = "";
+            String avatar = "";
             int i = 0;
-            int j;
+            int j, textLength;
             int counterIdSocialMedia = 0;
 
-            //TODO: Dodać awatar
-            //TODO: Dodać funkcję aby po ponownym uruchomieniu użytkownicy byli w RecyclerView.
             if (!autoCompleteTextView.getText().toString().equals("")) {
                 text = autoCompleteTextView.getText().toString();
                 while (!(text.charAt(i) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
@@ -215,9 +204,11 @@ public class MainActivity extends AppCompatActivity {
                     j++;
                 }
                 idSocialMedia = text.substring(i + 1, j);
+                textLength = text.length();
+                avatar = text.substring(j + 1, textLength);
 
                 if (playerFriendRecyclerViewArrayList.size() == 0) {
-                    insertItem(idSocialMedia, name);
+                    insertItem(idSocialMedia, name, avatar);
                 } else {
                     for (i = 0; i < playerFriendRecyclerViewArrayList.size(); i++) {
                         if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
@@ -226,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (counterIdSocialMedia == 0) {
-                        insertItem(idSocialMedia, name);
+                        insertItem(idSocialMedia, name, avatar);
                     }
                 }
             }
@@ -235,8 +226,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void insertItem(String idSocialMedia, String name) {
-        playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name));
+    private void insertItem(String idSocialMedia, String name, String avatar) {
+        playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name, avatar));
         adapterRecyclerView.notifyItemInserted(playerFriendRecyclerViewArrayList.size());
 
         saveData();

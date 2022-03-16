@@ -1,27 +1,18 @@
 package com.mateusz.jasiak.knowmore;
 
-import android.net.Uri;
-
 public class PlayerFriendRecyclerView {
 
-    private Uri avatar; //TODO: Usunąć jeśli nie będzie wykorzystywane
     private String idSocialMediaRecyclerView;
     private String nameRecyclerView;
+    private String avatar;
 
-    public PlayerFriendRecyclerView(String idSocialMediaRecyclerView, String nameRecyclerView) {
+    public PlayerFriendRecyclerView(String idSocialMediaRecyclerView, String nameRecyclerView, String avatar) {
         this.idSocialMediaRecyclerView = idSocialMediaRecyclerView;
         this.nameRecyclerView = nameRecyclerView;
+        this.avatar = avatar;
     }
 
-    //TODO: Docelowo ma działać to v
-    /*public PlayerFriendRecyclerView(Uri avatar, String idSocialMediaRecyclerView, String nameRecyclerView) {
-        this.avatar = avatar;
-        this.idSocialMediaRecyclerView = idSocialMediaRecyclerView;
-        this.nameRecyclerView = nameRecyclerView;
-    }*/
-
-    //TODO: Usunąć jeśli nie będzie wykorzystywane
-    public Uri getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 

@@ -7,13 +7,15 @@ public class PlayersDataAPI {
     private String firstName;
     private String surname;
     private String name;
+    private String personPhoto;
 
-    public PlayersDataAPI(String id, String idSocialMedia, String firstName, String surname, String name) {
+    public PlayersDataAPI(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto) {
         this.id = id;
         this.idSocialMedia = idSocialMedia;
         this.firstName = firstName;
         this.surname = surname;
         this.name = name;
+        this.personPhoto = personPhoto;
     }
 
     public String getId() {
@@ -34,5 +36,9 @@ public class PlayersDataAPI {
 
     public String getName() {
         return name;
+    }
+
+    public String getPersonPhoto() {
+        return personPhoto;
     }
 }

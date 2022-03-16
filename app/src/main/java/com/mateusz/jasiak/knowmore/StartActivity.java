@@ -9,9 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.mateusz.jasiak.knowmore.databinding.ActivityStartBinding;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -125,10 +124,10 @@ public class StartActivity extends AppCompatActivity {
                 String personFamilyName = acct.getFamilyName();
                 String personEmail = acct.getEmail();
                 String personId = acct.getId();
-                Uri personPhoto = acct.getPhotoUrl();
+                String personPhoto = Objects.requireNonNull(acct.getPhotoUrl()).getEncodedPath();
 
                 //Wysyłanie na API
-                if (!postPlayerAfterTheFirstLogin("uuid", personId, personGivenName, personFamilyName, personName)) {
+                if (!postPlayerAfterTheFirstLogin("uuid", personId, personGivenName, personFamilyName, personName, personPhoto)) {
 
                 }
 
@@ -232,10 +231,7 @@ public class StartActivity extends AppCompatActivity {
         });
     }*/
 
-    Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name) {
-
-        //nameWithAPI = findViewById(R.id.nameWithAPI); //TODO: Usunąć.
-
+    Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -257,10 +253,9 @@ public class StartActivity extends AppCompatActivity {
                         if (playersDataAPIs.getIdSocialMedia().equals(idSocialMedia)) {
                             temp++;
                         }
-                        //nameWithAPI.setText(playersDataAPIs.getFirstName() + '\n'); //TODO: Usunąć.
                     }
                     if (temp == 0) {
-                        postPlayer(id, idSocialMedia, firstName, surname, name);
+                        postPlayer(id, idSocialMedia, firstName, surname, name, personPhoto);
                         checkFirstLogin = false;
                     } else {
                         checkFirstLogin = true;
@@ -277,7 +272,7 @@ public class StartActivity extends AppCompatActivity {
         return checkFirstLogin;
     }
 
-    void postPlayer(String id, String idSocialMedia, String firstName, String surname, String name) {
+    void postPlayer(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -285,7 +280,7 @@ public class StartActivity extends AppCompatActivity {
 
         JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
 
-        PlayersDataAPI playersDataAPI = new PlayersDataAPI(id, idSocialMedia, firstName, surname, name);
+        PlayersDataAPI playersDataAPI = new PlayersDataAPI(id, idSocialMedia, firstName, surname, name, personPhoto);
         Call<PlayersDataAPI> call = jsonKnowMoreAPI.addPlayer(playersDataAPI);
         call.enqueue(new Callback<PlayersDataAPI>() {
             @Override
