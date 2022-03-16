@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
@@ -45,16 +46,13 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
     //private static final String TAG = "Test";
     //----------------------------------------------------------------------------------------------
-    //Retrofit
-    //private TextView nameWithAPI; //TODO: Usunąć.
-    //----------------------------------------------------------------------------------------------
     //Rozwijana lista z graczami
     AutoCompleteTextView autoCompleteTextView;
     ArrayList<String> players = new ArrayList<String>();
 
-    ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViewArrayList = new ArrayList<>();
+    ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViewArrayList;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapterRecyclerView;
+    private PlayerFriendAdapterRecyclerView adapterRecyclerView;
     private RecyclerView.LayoutManager layoutManagerRecyclerView;
 
     @Override
@@ -86,11 +84,10 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, players);
 
         autoCompleteTextView.setAdapter(arrayAdapter);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         loadData();
-
-        //Retrofit łączenie.
-        //getPlayers("1");
+        buildRecyclerView();
 
         //------------------------------------------------------------------------------------------
         //Przechodzenie do QuestionsActivity
@@ -125,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void signOut(View view) {
         switch (view.getId()) {
-            // ...
             case R.id.sign_out_button:
                 signOut();
                 Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
@@ -135,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, StartActivity.class);
                 MainActivity.this.startActivity(intent);
                 break;
-            // ...
         }
     }
 
@@ -149,9 +144,6 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     //Retrofit łączenie. Docelowo zamienić adres z localhost na domenę. Wyodrębnić na funkcję itp.
     void getPlayers() {
-
-        //TextView nameWithAPI = findViewById(R.id.nameWithAPI); //TODO: Usunąć.
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -169,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
                     List<PlayersDataAPI> playersDataAPI = response.body();
 
                     for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
-                        //nameWithAPI.setText(playersDataAPIs.getName() + '\n'); //TODO: Usunąć.
                         players.add(playersDataAPIs.getName() + "#" + playersDataAPIs.getIdSocialMedia() + "#");
                     }
                 }
@@ -184,8 +175,17 @@ public class MainActivity extends AppCompatActivity {
 
     //----------------------------------------------------------------------------------------------
     //Rozwijana lista z graczami
-    public void addPlayerToListFriends(View view) {
+    private void buildRecyclerView() {
+        recyclerView = findViewById(R.id.playerFriendRecyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManagerRecyclerView = new LinearLayoutManager(this);
+        adapterRecyclerView = new PlayerFriendAdapterRecyclerView(playerFriendRecyclerViewArrayList);
 
+        recyclerView.setLayoutManager(layoutManagerRecyclerView);
+        recyclerView.setAdapter(adapterRecyclerView);
+    }
+
+    public void addPlayerToListFriends(View view) {
         try {
             String text;
             String idSocialMedia = "";
@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
             int j;
             int counterIdSocialMedia = 0;
 
+            //TODO: Dodać awatar
             //TODO: Dodać funkcję aby po ponownym uruchomieniu użytkownicy byli w RecyclerView.
             if (!autoCompleteTextView.getText().toString().equals("")) {
                 text = autoCompleteTextView.getText().toString();
@@ -208,15 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 idSocialMedia = text.substring(i + 1, j);
 
                 if (playerFriendRecyclerViewArrayList.size() == 0) {
-                    playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name));
-
-                    recyclerView = findViewById(R.id.playerFriendRecyclerView);
-                    recyclerView.setHasFixedSize(true);
-                    layoutManagerRecyclerView = new LinearLayoutManager(this);
-                    adapterRecyclerView = new PlayerFriendAdapterRecyclerView(playerFriendRecyclerViewArrayList);
-
-                    recyclerView.setLayoutManager(layoutManagerRecyclerView);
-                    recyclerView.setAdapter(adapterRecyclerView);
+                    insertItem(idSocialMedia, name);
                 } else {
                     for (i = 0; i < playerFriendRecyclerViewArrayList.size(); i++) {
                         if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
@@ -225,35 +218,20 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (counterIdSocialMedia == 0) {
-                        playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name));
-
-                        recyclerView = findViewById(R.id.playerFriendRecyclerView);
-                        recyclerView.setHasFixedSize(true);
-                        layoutManagerRecyclerView = new LinearLayoutManager(this);
-                        adapterRecyclerView = new PlayerFriendAdapterRecyclerView(playerFriendRecyclerViewArrayList);
-
-                        recyclerView.setLayoutManager(layoutManagerRecyclerView);
-                        recyclerView.setAdapter(adapterRecyclerView);
+                        insertItem(idSocialMedia, name);
                     }
                 }
             }
-            saveData();
         } catch (Exception e) {
             Toast.makeText(this, R.string.wrong_name, Toast.LENGTH_LONG).show();
         }
     }
 
-    private void loadData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+    private void insertItem(String idSocialMedia, String name) {
+        playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name));
+        adapterRecyclerView.notifyItemInserted(playerFriendRecyclerViewArrayList.size());
 
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("player_friend", null);
-        Type type = new TypeToken<ArrayList<PlayerFriendRecyclerView>>() {}.getType();
-
-        playerFriendRecyclerViewArrayList = gson.fromJson(json, type);
-        if (playerFriendRecyclerViewArrayList == null) {
-            playerFriendRecyclerViewArrayList = new ArrayList<>();
-        }
+        saveData();
     }
 
     private void saveData() {
@@ -265,7 +243,19 @@ public class MainActivity extends AppCompatActivity {
 
         editor.putString("player_friend", json);
         editor.apply();
-        Toast.makeText(this, "Saved Array List to Shared preferences. ", Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("player_friend", null);
+        Type type = new TypeToken<ArrayList<PlayerFriendRecyclerView>>() {}.getType();
+        playerFriendRecyclerViewArrayList = gson.fromJson(json, type);
+
+        if (playerFriendRecyclerViewArrayList == null) {
+            playerFriendRecyclerViewArrayList = new ArrayList<>();
+        }
     }
 
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
