@@ -119,12 +119,16 @@ public class StartActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
             if (acct != null) {
+                String personPhoto = "";
                 String personName = acct.getDisplayName();
                 String personGivenName = acct.getGivenName();
                 String personFamilyName = acct.getFamilyName();
                 String personEmail = acct.getEmail();
                 String personId = acct.getId();
-                String personPhoto = Objects.requireNonNull(acct.getPhotoUrl()).getEncodedPath();
+                if (!(acct.getPhotoUrl() == null)) {
+                    personPhoto = Objects.requireNonNull(acct.getPhotoUrl()).getEncodedPath();
+                }
+
 
                 //Wysyłanie na API
                 if (!postPlayerAfterTheFirstLogin("uuid", personId, personGivenName, personFamilyName, personName, personPhoto)) {
