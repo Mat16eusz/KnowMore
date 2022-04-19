@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
     //Google login
     ActivityMainBinding binding;
     GoogleSignInClient mGoogleSignInClient;
-    //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
-    //private static final String TAG = "Test";
     //----------------------------------------------------------------------------------------------
     //Rozwijana lista z graczami
     AutoCompleteTextView autoCompleteTextView;
@@ -355,29 +353,4 @@ public class MainActivity extends AppCompatActivity {
 
         return body;
     }
-
-    //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
-    /*public void Test(View view) {
-        FriendFinderDialog dialog = new FriendFinderDialog(this);
-        // if we want to get notified when the dialog is closed
-        // we can register a Callback
-        dialog.registerCallback(
-                this.callbackManager,
-                new FacebookCallback<FriendFinderDialog.Result>() {
-                    @Override
-                    public void onSuccess(FriendFinderDialog.Result friendFinderResult) {
-                        Log.e(MainActivity.TAG, "Player Finder Dialog closed");
-                    }
-
-                    @Override
-                    public void onCancel() {}
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Log.e("GamingServicesFBCallback", exception.toString());
-                    }
-                });
-        // open the dialog
-        dialog.show();
-    }*/
 }

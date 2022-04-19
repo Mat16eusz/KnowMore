@@ -46,10 +46,6 @@ public class StartActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     //Firebase
     private String token;
-    //----------------------------------------------------------------------------------------------
-    //Facebook login
-    /*private CallbackManager callbackManager;
-    private LoginButton loginButton;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,31 +93,6 @@ public class StartActivity extends AppCompatActivity {
                     Log.v("Token FCM", token, task.getException());
                 }
             });
-
-        //------------------------------------------------------------------------------------------
-        //Facebook login
-        /*loginButton = findViewById(R.id.login_button);
-
-        callbackManager = CallbackManager.Factory.create();
-
-        loginButton.setPermissions(Arrays.asList("user_friends"));
-
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d("Demo", "Login Successful!");
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d("Demo", "Login canceled.");
-            }
-
-            @Override
-            public void onError(@NonNull FacebookException e) {
-                Log.d("Demo", "Login error.");
-            }
-        });*/
     }
 
     //----------------------------------------------------------------------------------------------
@@ -167,96 +138,6 @@ public class StartActivity extends AppCompatActivity {
             Log.w("GOOGLE ERROR", e.getMessage());
         }
     }
-
-    //----------------------------------------------------------------------------------------------
-    //Facebook login
-    //TODO: jakoś inaczej te zmienne.
-    /*String firstName;
-    String lastName;
-    String id;
-    String name;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-
-        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(@Nullable JSONObject jsonObject, @Nullable GraphResponse graphResponse) {
-                try {
-                    Log.d("Demo", jsonObject.toString());
-                    name = jsonObject.getString("name");
-                    firstName = jsonObject.getString("first_name"); // Nic
-                    lastName = jsonObject.getString("last_name"); // Nic
-                    id = jsonObject.getString("id"); // Nic
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //Wysyłanie na API
-                //TODO: wywala bo nie ma id.
-                if (!postPlayerAfterTheFirstLogin("uuid", id, firstName, lastName, name)) {
-
-                }
-            }
-        });
-
-        Bundle bundle = new Bundle();
-        bundle.putString("fields", "gender, name, id, first_name, last_name");
-
-        graphRequest.setParameters(bundle);
-        graphRequest.executeAsync();
-    }
-
-    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-            if (currentAccessToken == null) {
-                LoginManager.getInstance().logOut();
-            }
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        accessTokenTracker.stopTracking();
-    }*/
-
-    //----------------------------------------------------------------------------------------------
-    //Retrofit łączenie. Docelowo zamienić adres z localhost na domenę. Wyodrębnić na funkcję itp.
-    /*void getPlayers(String id, String idSocialMedia, String firstName, String surname, String name) {
-
-        nameWithAPI = findViewById(R.id.nameWithAPI); //TODO: Usunąć.
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
-
-        Call<List<PlayersDataAPI>> call = jsonKnowMoreAPI.getPlayersData();
-        call.enqueue(new Callback<List<PlayersDataAPI>>() {
-            @Override
-            public void onResponse(Call<List<PlayersDataAPI>> call, Response<List<PlayersDataAPI>> response) {
-                if (response.code() > 399) {
-                    finish();
-                } else {
-                    List<PlayersDataAPI> playersDataAPI = response.body();
-
-                    for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
-                        nameWithAPI.setText(playersDataAPIs.getName() + '\n'); //TODO: Usunąć.
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<PlayersDataAPI>> call, Throwable t) {
-
-            }
-        });
-    }*/
 
     Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
         Retrofit retrofit = new Retrofit.Builder()
