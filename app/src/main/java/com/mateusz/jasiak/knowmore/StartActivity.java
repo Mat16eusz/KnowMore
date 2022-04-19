@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -18,7 +19,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mateusz.jasiak.knowmore.databinding.ActivityStartBinding;
 
 import java.util.List;
@@ -39,6 +42,10 @@ public class StartActivity extends AppCompatActivity {
     //Google login
     ActivityStartBinding binding;
     GoogleSignInClient mGoogleSignInClient;
+    private String personId; //Edit, było w funkcji zainicjowane lokalnie.
+    //----------------------------------------------------------------------------------------------
+    //Firebase
+    private String token;
     //----------------------------------------------------------------------------------------------
     //Facebook login
     /*private CallbackManager callbackManager;
@@ -73,6 +80,23 @@ public class StartActivity extends AppCompatActivity {
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             StartActivity.this.startActivity(intent);
         }
+
+        //------------------------------------------------------------------------------------------
+        //Firebase
+        FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("Token FCM error", "Fetching FCM registration token failed", task.getException());
+
+                        return;
+                    }
+
+                    token = task.getResult();
+                    Log.v("Token FCM", token, task.getException());
+                }
+            });
 
         //------------------------------------------------------------------------------------------
         //Facebook login
@@ -124,19 +148,18 @@ public class StartActivity extends AppCompatActivity {
                 String personGivenName = acct.getGivenName();
                 String personFamilyName = acct.getFamilyName();
                 String personEmail = acct.getEmail();
-                String personId = acct.getId();
+                personId = acct.getId();
                 if (!(acct.getPhotoUrl() == null)) {
                     personPhoto = Objects.requireNonNull(acct.getPhotoUrl()).getEncodedPath();
                 }
 
-
                 //Wysyłanie na API
-                if (!postPlayerAfterTheFirstLogin("uuid", personId, personGivenName, personFamilyName, personName, personPhoto)) {
+                if (!postPlayerAfterTheFirstLogin("uuid", personId, personGivenName, personFamilyName, personName, personPhoto, token)) {
 
                 }
 
                 //Przechodzenie do MainActivity
-                saveData("true");
+                saveData("true", token);
                 Intent intent = new Intent(StartActivity.this, MainActivity.class);
                 StartActivity.this.startActivity(intent);
             }
@@ -235,7 +258,7 @@ public class StartActivity extends AppCompatActivity {
         });
     }*/
 
-    Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto) {
+    Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -259,7 +282,7 @@ public class StartActivity extends AppCompatActivity {
                         }
                     }
                     if (temp == 0) {
-                        postPlayer(id, idSocialMedia, firstName, surname, name, personPhoto);
+                        postPlayer(id, idSocialMedia, firstName, surname, name, personPhoto, token);
                         checkFirstLogin = false;
                     } else {
                         checkFirstLogin = true;
@@ -276,7 +299,7 @@ public class StartActivity extends AppCompatActivity {
         return checkFirstLogin;
     }
 
-    void postPlayer(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto) {
+    void postPlayer(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -284,7 +307,7 @@ public class StartActivity extends AppCompatActivity {
 
         JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
 
-        PlayersDataAPI playersDataAPI = new PlayersDataAPI(id, idSocialMedia, firstName, surname, name, personPhoto);
+        PlayersDataAPI playersDataAPI = new PlayersDataAPI(id, idSocialMedia, firstName, surname, name, personPhoto, token);
         Call<PlayersDataAPI> call = jsonKnowMoreAPI.addPlayer(playersDataAPI);
         call.enqueue(new Callback<PlayersDataAPI>() {
             @Override
@@ -303,10 +326,12 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
-    private void saveData(String logged) {
+    private void saveData(String logged, String token) {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("LOGGED_KEY", logged);
+        editor.putString("TOKEN_KEY", token);
+        editor.putString("ID_SOCIAL_MEDIA_KEY", personId);
         editor.apply();
     }
 

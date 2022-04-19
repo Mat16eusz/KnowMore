@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -54,12 +55,20 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private PlayerFriendAdapterRecyclerView adapterRecyclerView;
     private RecyclerView.LayoutManager layoutManagerRecyclerView;
+    //----------------------------------------------------------------------------------------------
+    //Firebase
+    //TODO: Po wyczyszczeniu cache'u token się zmienia na urządzeniu!!!
+    private String myToken; //TODO: Sprawdzić czy lepiej z bazy danych pobierać po ID.
+    private String myIdSocialMedia;
+    private String myName;
+    private String myAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadData();
         //------------------------------------------------------------------------------------------
         //Google login
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -79,25 +88,39 @@ public class MainActivity extends AppCompatActivity {
         //Rozwijana lista z graczami
         getPlayers(); //TODO: Zrobić odświeżanie.
 
+        //TODO: Po dodaniu ustawić listę na pusty string.
+        //TODO: Od znaku # ukryć tekst w prawo.
         autoCompleteTextView = findViewById(R.id.editTextTextPersonName);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, players);
 
         autoCompleteTextView.setAdapter(arrayAdapter);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        loadData();
         buildRecyclerView();
+
+        loadDataNotification();
+        if (!loadDataNotification().equals("false")) {
+            addPlayerToListFriendsFromNotification(loadDataNotification());
+        }
+
+        /*if (getIntent().getExtras() != null) {
+            for (String key: getIntent().getExtras().keySet()) {
+                if (key.equals("title")) {
+
+                    Log.w("Powiadomienia", getIntent().getExtras().getString(key));
+                }
+            }
+        }*/
     }
 
     private void signOut() {
         mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
+            .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    //insertItem(idSocialMedia, name, avatar);
+                }
+            });
     }
 
     private void revokeAccess() {
@@ -151,7 +174,12 @@ public class MainActivity extends AppCompatActivity {
                     List<PlayersDataAPI> playersDataAPI = response.body();
 
                     for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
-                        players.add(playersDataAPIs.getName() + "#" + playersDataAPIs.getIdSocialMedia() + "#" + playersDataAPIs.getPersonPhoto());
+                        players.add(playersDataAPIs.getName() + "#" + playersDataAPIs.getIdSocialMedia() + "#" + playersDataAPIs.getPersonPhoto() + "#" + playersDataAPIs.getToken());
+
+                        if (myIdSocialMedia.equals(playersDataAPIs.getIdSocialMedia())) {
+                            myName = playersDataAPIs.getName();
+                            myAvatar = playersDataAPIs.getPersonPhoto();
+                        }
                     }
                 }
             }
@@ -183,14 +211,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //TODO: Zabezpieczyć aby użytkownik nie mógł dodać samego siebie.
     public void addPlayerToListFriends(View view) {
         try {
             String text;
             String idSocialMedia = "";
             String name = "";
             String avatar = "";
+            String friendToken = "";
             int i = 0;
-            int j, textLength;
+            int j, k, textLength;
             int counterIdSocialMedia = 0;
 
             if (!autoCompleteTextView.getText().toString().equals("")) {
@@ -204,11 +234,18 @@ public class MainActivity extends AppCompatActivity {
                     j++;
                 }
                 idSocialMedia = text.substring(i + 1, j);
+                k = j + 1;
+                while (!(text.charAt(k) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
+                    k++;
+                }
+                avatar = text.substring(j + 1, k);
+
                 textLength = text.length();
-                avatar = text.substring(j + 1, textLength);
+                friendToken = text.substring(k + 1, textLength);
 
                 if (playerFriendRecyclerViewArrayList.size() == 0) {
                     insertItem(idSocialMedia, name, avatar);
+                    sendNotificationToPlayer(friendToken, myIdSocialMedia, myName, myAvatar);
                 } else {
                     for (i = 0; i < playerFriendRecyclerViewArrayList.size(); i++) {
                         if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
@@ -218,10 +255,52 @@ public class MainActivity extends AppCompatActivity {
 
                     if (counterIdSocialMedia == 0) {
                         insertItem(idSocialMedia, name, avatar);
+                        sendNotificationToPlayer(friendToken, myIdSocialMedia, myName, myAvatar);
                     }
                 }
             }
         } catch (Exception e) {
+            Log.e("Add player to list friends", e.getMessage());
+            Toast.makeText(this, R.string.wrong_name, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void addPlayerToListFriendsFromNotification(String body) {
+        try {
+            String idSocialMedia = "";
+            String name = "";
+            String avatar = "";
+            int i = 0;
+            int j, textLength;
+            int counterIdSocialMedia = 0;
+
+            while (!(body.charAt(i) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
+                i++;
+            }
+            name = body.substring(0, i);
+            j = i + 1;
+            while (!(body.charAt(j) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
+                j++;
+            }
+            idSocialMedia = body.substring(i + 1, j);
+            textLength = body.length();
+            avatar = body.substring(j + 1, textLength);
+
+            if (playerFriendRecyclerViewArrayList.size() == 0) {
+                insertItem(idSocialMedia, name, avatar);
+            } else {
+                for (i = 0; i < playerFriendRecyclerViewArrayList.size(); i++) {
+                    if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
+                        counterIdSocialMedia++;
+                    }
+                }
+
+                if (counterIdSocialMedia == 0) {
+                    insertItem(idSocialMedia, name, avatar);
+                }
+            }
+        } catch (Exception e) {
+            Log.e("Add player to list friends from notification", e.getMessage());
             Toast.makeText(this, R.string.wrong_name, Toast.LENGTH_LONG).show();
         }
     }
@@ -249,12 +328,32 @@ public class MainActivity extends AppCompatActivity {
 
         Gson gson = new Gson();
         String json = sharedPreferences.getString("player_friend", null);
+        myToken = sharedPreferences.getString("TOKEN_KEY", null);
+        myIdSocialMedia = sharedPreferences.getString("ID_SOCIAL_MEDIA_KEY", null);
         Type type = new TypeToken<ArrayList<PlayerFriendRecyclerView>>() {}.getType();
         playerFriendRecyclerViewArrayList = gson.fromJson(json, type);
 
         if (playerFriendRecyclerViewArrayList == null) {
             playerFriendRecyclerViewArrayList = new ArrayList<>();
         }
+    }
+
+    private void sendNotificationToPlayer(String friendToken, String myIdSocialMedia, String myName, String myAvatar) {
+        //TODO: TOKEN na który chcę wysyłać dane zamienić na zmienną i to najprawdopodobniej będzie z bazy danych.
+        if (!(myToken.equals(friendToken))) {
+            String body = myName + "#" + myIdSocialMedia + "#" + myAvatar;
+
+            FCMNotificationSend FCMNotificationSend = new FCMNotificationSend(friendToken,
+            getResources().getString(R.string.invite_notification) + " " + myName, body, getApplicationContext(), MainActivity.this);
+            FCMNotificationSend.SendNotifications();
+        }
+    }
+
+    private String loadDataNotification() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        String body = sharedPreferences.getString("RECEIVED_KEY", "false");
+
+        return body;
     }
 
     //TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.

@@ -8,14 +8,16 @@ public class PlayersDataAPI {
     private String surname;
     private String name;
     private String personPhoto;
+    private String token;
 
-    public PlayersDataAPI(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto) {
+    public PlayersDataAPI(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
         this.id = id;
         this.idSocialMedia = idSocialMedia;
         this.firstName = firstName;
         this.surname = surname;
         this.name = name;
         this.personPhoto = personPhoto;
+        this.token = token;
     }
 
     public String getId() {
@@ -40,5 +42,9 @@ public class PlayersDataAPI {
 
     public String getPersonPhoto() {
         return personPhoto;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

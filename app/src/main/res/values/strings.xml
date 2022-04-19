@@ -12,4 +12,5 @@
     <string name="logged_out">Logged out!</string>
     <string name="invite_a_friend">Invite a friend</string>
     <string name="wrong_name">You entered the wrong username</string>
+    <string name="invite_notification">Invitation to the game from</string>
 </resources>
