@@ -16,8 +16,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//TODO: Raczej do usunięcia. To było pod zapraszanie zanjomych na FB nie do końca działało.
-//import com.facebook.gamingservices.FriendFinderDialog;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -100,15 +98,6 @@ public class MainActivity extends AppCompatActivity {
         if (!loadDataNotification().equals("false")) {
             addPlayerToListFriendsFromNotification(loadDataNotification());
         }
-
-        /*if (getIntent().getExtras() != null) {
-            for (String key: getIntent().getExtras().keySet()) {
-                if (key.equals("title")) {
-
-                    Log.w("Powiadomienia", getIntent().getExtras().getString(key));
-                }
-            }
-        }*/
     }
 
     private void signOut() {
@@ -116,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    //insertItem(idSocialMedia, name, avatar);
+
                 }
             });
     }
