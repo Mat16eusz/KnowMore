@@ -69,9 +69,12 @@ public class PlayerFriendAdapterRecyclerView extends RecyclerView.Adapter<Player
 
         holder.idSocialMedia.setText(currentItem.getIdSocialMediaRecyclerView());
         holder.nameRecyclerView.setText(currentItem.getNameRecyclerView());
-        //TODO: Jeśli jest null dodać na sztywno awatar
         //TODO: Update w API adresu do awataru -> obecnie gdy użytkownik zmieni awatar na API pozoostaje link z pierwszego logowania
-        Picasso.get().load("https://lh3.googleusercontent.com" + currentItem.getAvatar()).into(holder.avatar);
+        if (currentItem.getAvatar().equals("")) {
+            Picasso.get().load(R.drawable.avatar).into(holder.avatar);
+        } else {
+            Picasso.get().load("https://lh3.googleusercontent.com" + currentItem.getAvatar()).into(holder.avatar);
+        }
     }
 
     @Override
