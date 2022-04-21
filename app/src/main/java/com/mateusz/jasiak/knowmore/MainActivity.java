@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     //----------------------------------------------------------------------------------------------
     //Rozwijana lista z graczami
+    //TODO: Dodać moduł usuwania użytkonika z listy po potwierdzeniu (eliminacja missclicku).
+    //TODO: Odśiweżanie listy (pullToRefresh i może coś automatycznego).
     AutoCompleteTextView autoCompleteTextView;
     ArrayList<String> players = new ArrayList<String>();
 
@@ -112,12 +114,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void revokeAccess() {
         mGoogleSignInClient.revokeAccess()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+            .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
 
-                    }
-                });
+                }
+            });
     }
 
     public void signOut(View view) {
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     //Retrofit łączenie. Docelowo zamienić adres z localhost na domenę. Wyodrębnić na funkcję itp.
     void getPlayers() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:3000/")
+                .baseUrl(JsonKnowMoreAPI.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

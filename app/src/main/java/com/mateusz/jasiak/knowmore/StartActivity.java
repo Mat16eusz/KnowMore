@@ -141,7 +141,7 @@ public class StartActivity extends AppCompatActivity {
 
     Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:3000/")
+                .baseUrl(JsonKnowMoreAPI.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -182,7 +182,7 @@ public class StartActivity extends AppCompatActivity {
 
     void postPlayer(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:3000/")
+                .baseUrl(JsonKnowMoreAPI.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
