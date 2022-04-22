@@ -10,6 +10,11 @@ public class PlayersDataAPI {
     private String personPhoto;
     private String token;
 
+    public PlayersDataAPI(String idSocialMedia, String token) {
+        this.idSocialMedia = idSocialMedia;
+        this.token = token;
+    }
+
     public PlayersDataAPI(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
         this.id = id;
         this.idSocialMedia = idSocialMedia;

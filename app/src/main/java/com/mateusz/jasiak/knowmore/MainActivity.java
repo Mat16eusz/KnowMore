@@ -29,6 +29,7 @@ import com.mateusz.jasiak.knowmore.databinding.ActivityMainBinding;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,12 +51,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> players = new ArrayList<String>();
 
     ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViewArrayList;
+    ArrayList<String> idSocialMediaList = new ArrayList<String>();
     private RecyclerView recyclerView;
     private PlayerFriendAdapterRecyclerView adapterRecyclerView;
     private RecyclerView.LayoutManager layoutManagerRecyclerView;
     //----------------------------------------------------------------------------------------------
     //Firebase
-    //TODO: Po wyczyszczeniu cache'u token się zmienia na urządzeniu!!!
     private String myToken; //TODO: Sprawdzić czy lepiej z bazy danych pobierać po ID.
     private String myIdSocialMedia;
     private String myName;
@@ -99,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
         loadDataNotification();
         if (!loadDataNotification().equals("false")) {
             addPlayerToListFriendsFromNotification(loadDataNotification());
+
+            //TODO: Przekminić czy ma to sens vvv
+            SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("RECEIVED_KEY", "false");
+            editor.apply();
         }
     }
 
@@ -278,10 +285,13 @@ public class MainActivity extends AppCompatActivity {
             if (playerFriendRecyclerViewArrayList.size() == 0) {
                 insertItem(idSocialMedia, name, avatar);
             } else {
-                for (i = 0; i < playerFriendRecyclerViewArrayList.size(); i++) {
-                    if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
+                for (i = 0; i < idSocialMediaList.size(); i++) {
+                    if (idSocialMediaList.get(i).equals(idSocialMedia)) {
                         counterIdSocialMedia++;
                     }
+                    /*if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
+                        counterIdSocialMedia++;
+                    }*/
                 }
 
                 if (counterIdSocialMedia == 0) {
@@ -297,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
     private void insertItem(String idSocialMedia, String name, String avatar) {
         playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name, avatar));
         adapterRecyclerView.notifyItemInserted(playerFriendRecyclerViewArrayList.size());
+        idSocialMediaList.add(idSocialMedia);
 
         saveData();
     }

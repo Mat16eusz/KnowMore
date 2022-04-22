@@ -129,6 +129,11 @@ public class StartActivity extends AppCompatActivity {
 
                 }
 
+                //Update tokenu
+                //TODO: Optymalizacja -> WAŻNE! musi być przed wywołaniem saveData("", "");
+                //      -> if () jeżeli token z pamięci jest inny niż aktualny (pierwsze logowanie chyba zabezpieczenie przed nullem).
+                updateToken(personId, token);
+
                 //Przechodzenie do MainActivity
                 saveData("true", token);
                 Intent intent = new Intent(StartActivity.this, MainActivity.class);
@@ -221,5 +226,28 @@ public class StartActivity extends AppCompatActivity {
         String logged = sharedPreferences.getString("LOGGED_KEY", "false");
 
         return logged;
+    }
+
+    public void updateToken(String idSocialMedia, String token) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(JsonKnowMoreAPI.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
+
+        PlayersDataAPI playersDataAPI = new PlayersDataAPI(idSocialMedia, token);
+        Call<PlayersDataAPI> call = jsonKnowMoreAPI.putPlayer(idSocialMedia, playersDataAPI);
+        call.enqueue(new Callback<PlayersDataAPI>() {
+            @Override
+            public void onResponse(Call<PlayersDataAPI> call, Response<PlayersDataAPI> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<PlayersDataAPI> call, Throwable t) {
+
+            }
+        });
     }
 }
