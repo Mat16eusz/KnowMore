@@ -9,14 +9,18 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Objects;
+
 public class FCMNotificationService extends FirebaseMessagingService {
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //TODO: Usunąć v i niepotrzebne importy
+    /*@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
 
@@ -41,6 +45,27 @@ public class FCMNotificationService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         saveData(text);
+    }*/
+
+    //TODO: Zoptymalizować: emulator -> brak powiadomień, aplikacja nie działa w tle -> brak powiadomień i nie dodaje użytkownika do recycler view,
+    // aplikacja w tle -> dodaje do recyclerView ale powiadomienie jest z cyframi - powinno być bez.
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        super.onMessageReceived(remoteMessage);
+
+        getFirebaseMessage(Objects.requireNonNull(remoteMessage.getNotification()).getTitle(), remoteMessage.getNotification().getBody());
+    }
+
+    public void getFirebaseMessage(String title, String message) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "myFirebaseChannel")
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle(title)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(101, builder.build());
+
+        saveData(message);
     }
 
     private void saveData(String text) {
