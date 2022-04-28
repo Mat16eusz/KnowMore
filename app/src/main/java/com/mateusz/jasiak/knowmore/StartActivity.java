@@ -1,5 +1,7 @@
 package com.mateusz.jasiak.knowmore;
 
+import static com.mateusz.jasiak.knowmore.APIClient.getClient;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -30,8 +32,6 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -144,13 +144,8 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(JsonKnowMoreAPI.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
+    private Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         Call<List<PlayersDataAPI>> call = jsonKnowMoreAPI.getPlayersData();
         call.enqueue(new Callback<List<PlayersDataAPI>>() {
@@ -185,13 +180,8 @@ public class StartActivity extends AppCompatActivity {
         return checkFirstLogin;
     }
 
-    void postPlayer(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(JsonKnowMoreAPI.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
+    private void postPlayer(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         PlayersDataAPI playersDataAPI = new PlayersDataAPI(id, idSocialMedia, firstName, surname, name, personPhoto, token);
         Call<PlayersDataAPI> call = jsonKnowMoreAPI.addPlayer(playersDataAPI);
@@ -228,13 +218,8 @@ public class StartActivity extends AppCompatActivity {
         return logged;
     }
 
-    public void updateToken(String idSocialMedia, String token) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(JsonKnowMoreAPI.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
+    private void updateToken(String idSocialMedia, String token) {
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         PlayersDataAPI playersDataAPI = new PlayersDataAPI(idSocialMedia, token);
         Call<PlayersDataAPI> call = jsonKnowMoreAPI.putPlayer(idSocialMedia, playersDataAPI);

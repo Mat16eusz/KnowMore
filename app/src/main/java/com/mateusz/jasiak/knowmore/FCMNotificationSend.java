@@ -22,7 +22,6 @@ public class FCMNotificationSend {
 
     String userFcmToken;
     String title;
-    String body;
     Context mContext;
     Activity mActivity;
 
@@ -30,10 +29,9 @@ public class FCMNotificationSend {
     private final String postUrl = "https://fcm.googleapis.com/fcm/send";
     private final String fcmServerKey ="AAAAj0J3aTs:APA91bGAsOiXYyCgE4_LkhiTY7r0IeSpvyjYCO2py500oTRNVVPwsM1CEfoHJuo9HrqqHU5IOYSdN__KtB2QbtTnfBIlW0QD4yr0wfjZRdrIPu9NXNgyhyJiRhxziBaRFd-Q_cItKRNx";
 
-    public FCMNotificationSend(String userFcmToken, String title, String body, Context mContext, Activity mActivity) {
+    public FCMNotificationSend(String userFcmToken, String title, Context mContext, Activity mActivity) {
         this.userFcmToken = userFcmToken;
         this.title = title;
-        this.body = body;
         this.mContext = mContext;
         this.mActivity = mActivity;
     }
@@ -45,12 +43,10 @@ public class FCMNotificationSend {
             mainObj.put("to", userFcmToken);
             JSONObject notiObject = new JSONObject();
             notiObject.put("title", title);
-            notiObject.put("body", body);
             notiObject.put("icon", R.drawable.ic_launcher_background);
             mainObj.put("notification", notiObject);
 
             Log.v("Send notification - title", title);
-            Log.v("Send notification - body", body);
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, postUrl, mainObj, new Response.Listener<JSONObject>() {
                 @Override

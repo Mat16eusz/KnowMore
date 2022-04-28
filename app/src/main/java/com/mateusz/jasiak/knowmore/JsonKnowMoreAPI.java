@@ -4,6 +4,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -21,4 +22,13 @@ public interface JsonKnowMoreAPI {
 
     @PUT("players/{id}")
     Call<PlayersDataAPI> putPlayer(@Path("id") String id, @Body PlayersDataAPI playersDataAPI);
+
+    @GET("invitations")
+    Call<List<PlayerInvitationAPI>> getPlayerInvitation();
+
+    @POST("invitations")
+    Call<PlayerInvitationAPI> addPlayerInvite(@Body PlayerInvitationAPI playerInvitationAPI);
+
+    @DELETE("invitations/{id}")
+    Call<Void>deletePlayerInvite(@Path("id") String id);
 }

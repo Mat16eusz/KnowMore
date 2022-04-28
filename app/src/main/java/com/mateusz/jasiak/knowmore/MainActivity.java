@@ -1,5 +1,7 @@
 package com.mateusz.jasiak.knowmore;
 
+import static com.mateusz.jasiak.knowmore.APIClient.getClient;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,16 +31,15 @@ import com.mateusz.jasiak.knowmore.databinding.ActivityMainBinding;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO: System usuwania osób z recyclerView: usuwanie z recyclerView z potwierdzeniem czy na pewno chcemy usunąć -> wysłanie do osoby powiadomienia, że dany urzytkownik Cię usunął.
+    //TODO: System zapraszania przebudować na zasadzie activity z zaproszeniami i tam akcetacja lub odrzucenie. Gdy akceptacja dodanie do recyclerView.
     //----------------------------------------------------------------------------------------------
     //Google login
     ActivityMainBinding binding;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadData();
+        loadData(); //IDSocialMedia + TOKEN + RecyclerView
         //------------------------------------------------------------------------------------------
         //Google login
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
         //------------------------------------------------------------------------------------------
         //Rozwijana lista z graczami
         getPlayers(); //TODO: Zrobić odświeżanie.
+        //Otrzymanie zaproszeń
+        getInvitations(); //TODO: Zrobić odświeżanie.
 
         //TODO: Po dodaniu ustawić listę na pusty string.
         //TODO: Od znaku # ukryć tekst w prawo.
@@ -96,17 +99,6 @@ public class MainActivity extends AppCompatActivity {
         autoCompleteTextView.setAdapter(arrayAdapter);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         buildRecyclerView();
-
-        loadDataNotification();
-        if (!loadDataNotification().equals("false")) {
-            addPlayerToListFriendsFromNotification(loadDataNotification());
-
-            //TODO: Przekminić czy ma to sens vvv
-            SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("RECEIVED_KEY", "false");
-            editor.apply();
-        }
     }
 
     private void signOut() {
@@ -152,13 +144,8 @@ public class MainActivity extends AppCompatActivity {
 
     //----------------------------------------------------------------------------------------------
     //Retrofit łączenie. Docelowo zamienić adres z localhost na domenę. Wyodrębnić na funkcję itp.
-    void getPlayers() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(JsonKnowMoreAPI.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonKnowMoreAPI jsonKnowMoreAPI = retrofit.create(JsonKnowMoreAPI.class);
+    public void getPlayers() {
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         Call<List<PlayersDataAPI>> call = jsonKnowMoreAPI.getPlayersData();
         call.enqueue(new Callback<List<PlayersDataAPI>>() {
@@ -241,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (playerFriendRecyclerViewArrayList.size() == 0) {
                     insertItem(idSocialMedia, name, avatar);
-                    sendNotificationToPlayer(friendToken, myIdSocialMedia, myName, myAvatar);
+                    sendNotificationToPlayer(friendToken, idSocialMedia, myIdSocialMedia, myName, myAvatar);
                 } else {
                     for (i = 0; i < playerFriendRecyclerViewArrayList.size(); i++) {
                         if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
@@ -251,55 +238,12 @@ public class MainActivity extends AppCompatActivity {
 
                     if (counterIdSocialMedia == 0) {
                         insertItem(idSocialMedia, name, avatar);
-                        sendNotificationToPlayer(friendToken, myIdSocialMedia, myName, myAvatar);
+                        sendNotificationToPlayer(friendToken, idSocialMedia, myIdSocialMedia, myName, myAvatar);
                     }
                 }
             }
         } catch (Exception e) {
             Log.e("Add player to list friends", e.getMessage());
-            Toast.makeText(this, R.string.wrong_name, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void addPlayerToListFriendsFromNotification(String body) {
-        try {
-            String idSocialMedia = "";
-            String name = "";
-            String avatar = "";
-            int i = 0;
-            int j, textLength;
-            int counterIdSocialMedia = 0;
-
-            while (!(body.charAt(i) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
-                i++;
-            }
-            name = body.substring(0, i);
-            j = i + 1;
-            while (!(body.charAt(j) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
-                j++;
-            }
-            idSocialMedia = body.substring(i + 1, j);
-            textLength = body.length();
-            avatar = body.substring(j + 1, textLength);
-
-            if (playerFriendRecyclerViewArrayList.size() == 0) {
-                insertItem(idSocialMedia, name, avatar);
-            } else {
-                for (i = 0; i < idSocialMediaList.size(); i++) {
-                    if (idSocialMediaList.get(i).equals(idSocialMedia)) {
-                        counterIdSocialMedia++;
-                    }
-                    /*if (((TextView) recyclerView.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString().equals(idSocialMedia)) {
-                        counterIdSocialMedia++;
-                    }*/
-                }
-
-                if (counterIdSocialMedia == 0) {
-                    insertItem(idSocialMedia, name, avatar);
-                }
-            }
-        } catch (Exception e) {
-            Log.e("Add player to list friends from notification", e.getMessage());
             Toast.makeText(this, R.string.wrong_name, Toast.LENGTH_LONG).show();
         }
     }
@@ -338,21 +282,84 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void sendNotificationToPlayer(String friendToken, String myIdSocialMedia, String myName, String myAvatar) {
+    //----------------------------------------------------------------------------------------------
+    //Wysyłanie powiadomień z zaproszeniami i obsługa ich
+    private void sendNotificationToPlayer(String friendToken, String friendIdSocialMedia, String myIdSocialMedia, String myName, String myAvatar) {
         //TODO: TOKEN na który chcę wysyłać dane zamienić na zmienną i to najprawdopodobniej będzie z bazy danych.
         if (!(myToken.equals(friendToken))) {
-            String body = myName + "#" + myIdSocialMedia + "#" + myAvatar;
-
             FCMNotificationSend FCMNotificationSend = new FCMNotificationSend(friendToken,
-            getResources().getString(R.string.invite_notification) + " " + myName, body, getApplicationContext(), MainActivity.this);
+                    getResources().getString(R.string.invite_notification) + " " + myName, getApplicationContext(), MainActivity.this);
             FCMNotificationSend.SendNotifications();
+
+            postInvitation("uuid", friendIdSocialMedia, myIdSocialMedia, myName, myAvatar);
         }
     }
 
-    private String loadDataNotification() {
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        String body = sharedPreferences.getString("RECEIVED_KEY", "false");
+    public void getInvitations() {
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
-        return body;
+        Call<List<PlayerInvitationAPI>> call = jsonKnowMoreAPI.getPlayerInvitation();
+        call.enqueue(new Callback<List<PlayerInvitationAPI>>() {
+            @Override
+            public void onResponse(Call<List<PlayerInvitationAPI>> call, Response<List<PlayerInvitationAPI>> response) {
+                if (response.code() > 399) {
+                    finish();
+                } else {
+                    List<PlayerInvitationAPI> playerInvitationAPI = response.body();
+
+                    for (PlayerInvitationAPI playerInvitationAPIs : playerInvitationAPI) {
+                        if (myIdSocialMedia.equals(playerInvitationAPIs.getMyIdSocialMedia())) {
+                            insertItem(playerInvitationAPIs.getIdSocialMedia(), playerInvitationAPIs.getName(), playerInvitationAPIs.getPersonPhoto());
+                            deletePost(playerInvitationAPIs.getId()); //TODO: Delete
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PlayerInvitationAPI>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void postInvitation(String id, String myIdSocialMedia, String idSocialMedia, String name, String personPhoto) {
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
+
+        PlayerInvitationAPI playerInvitationAPI = new PlayerInvitationAPI(id, myIdSocialMedia, idSocialMedia, name, personPhoto);
+        Call<PlayerInvitationAPI> call = jsonKnowMoreAPI.addPlayerInvite(playerInvitationAPI);
+        call.enqueue(new Callback<PlayerInvitationAPI>() {
+            @Override
+            public void onResponse(Call<PlayerInvitationAPI> call, Response<PlayerInvitationAPI> response) {
+                if (!response.isSuccessful()) {
+                    return;
+                }
+
+                PlayerInvitationAPI playerInvitationAPIResponse = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<PlayerInvitationAPI> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void deletePost(String id) {
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
+
+        Call<Void> call = jsonKnowMoreAPI.deletePlayerInvite(id);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
     }
 }
