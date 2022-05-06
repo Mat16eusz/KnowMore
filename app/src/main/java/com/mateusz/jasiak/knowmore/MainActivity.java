@@ -62,6 +62,19 @@ public class MainActivity extends AppCompatActivity {
     private String myIdSocialMedia;
     private String myName;
     private String myAvatar;
+    //----------------------------------------------------------------------------------------------
+    //Questions
+    public ArrayList<Integer> idQuestions = new ArrayList<Integer>();
+    public ArrayList<String> questionsEN = new ArrayList<String>();
+    public ArrayList<String> answerOneEN = new ArrayList<String>();
+    public ArrayList<String> answerTwoEN = new ArrayList<String>();
+    public ArrayList<String> answerThreeEN = new ArrayList<String>();
+    public ArrayList<String> answerFourEN = new ArrayList<String>();
+    public ArrayList<String> questionsPL = new ArrayList<String>();
+    public ArrayList<String> answerOnePL = new ArrayList<String>();
+    public ArrayList<String> answerTwoPL = new ArrayList<String>();
+    public ArrayList<String> answerThreePL = new ArrayList<String>();
+    public ArrayList<String> answerFourPL = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
         //Rozwijana lista z graczami
         getPlayers(); //TODO: Zrobić odświeżanie.
         //Otrzymanie zaproszeń
-        getInvitations(); //TODO: Zrobić odświeżanie.
+        getInvitations(); //TODO: Zrobić odświeżanie i zabezpieczenie przed sytuacją, że ktoś usuwa dane aplikacji i wyślę się jeszcze raz.
+        getQuestions();
 
         //TODO: Po dodaniu ustawić listę na pusty string.
         //TODO: Od znaku # ukryć tekst w prawo.
@@ -185,11 +199,28 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManagerRecyclerView);
         recyclerView.setAdapter(adapterRecyclerView);
 
+        //Przechodzenie do QuestionsActivity
         adapterRecyclerView.setOnItemClickListener(new PlayerFriendAdapterRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+                String friendIdSocialMedia = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString();
+
                 Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
+                intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_EN", questionsEN);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_EN", answerOneEN);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_EN", answerTwoEN);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_EN", answerThreeEN);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_EN", answerFourEN);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_PL", questionsPL);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_PL", answerOnePL);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_PL", answerTwoPL);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL", answerThreePL);
+                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL", answerFourPL);
                 MainActivity.this.startActivity(intent);
+                //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
             }
         });
     }
@@ -310,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
                     for (PlayerInvitationAPI playerInvitationAPIs : playerInvitationAPI) {
                         if (myIdSocialMedia.equals(playerInvitationAPIs.getMyIdSocialMedia())) {
                             insertItem(playerInvitationAPIs.getIdSocialMedia(), playerInvitationAPIs.getName(), playerInvitationAPIs.getPersonPhoto());
-                            deletePost(playerInvitationAPIs.getId()); //TODO: Delete
+                            deletePost(playerInvitationAPIs.getId());
                         }
                     }
                 }
@@ -358,6 +389,41 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getQuestions() {
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
+
+        Call<List<QuestionsAPI>> call = jsonKnowMoreAPI.getQuestions();
+        call.enqueue(new Callback<List<QuestionsAPI>>() {
+            @Override
+            public void onResponse(Call<List<QuestionsAPI>> call, Response<List<QuestionsAPI>> response) {
+                if (response.code() > 399) {
+                    finish();
+                } else {
+                    List<QuestionsAPI> questionsAPI = response.body();
+
+                    for (QuestionsAPI questionsAPIs : questionsAPI) {
+                        idQuestions.add(questionsAPIs.getIdQuestions());
+                        questionsEN.add(questionsAPIs.getQuestionsEN());
+                        answerOneEN.add(questionsAPIs.getAnswerOneEN());
+                        answerTwoEN.add(questionsAPIs.getAnswerTwoEN());
+                        answerThreeEN.add(questionsAPIs.getAnswerThreeEN());
+                        answerFourEN.add(questionsAPIs.getAnswerFourEN());
+                        questionsPL.add(questionsAPIs.getQuestionsPL());
+                        answerOnePL.add(questionsAPIs.getAnswerOnePL());
+                        answerTwoPL.add(questionsAPIs.getAnswerTwoPL());
+                        answerThreePL.add(questionsAPIs.getAnswerThreePL());
+                        answerFourPL.add(questionsAPIs.getAnswerFourPL());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<QuestionsAPI>> call, Throwable t) {
 
             }
         });

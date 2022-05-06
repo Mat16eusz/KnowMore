@@ -37,7 +37,7 @@ public class StartActivity extends AppCompatActivity {
 
     //----------------------------------------------------------------------------------------------
     //Login
-    private Boolean checkFirstLogin = true;
+    private boolean checkFirstLogin = true;
     //----------------------------------------------------------------------------------------------
     //Google login
     ActivityStartBinding binding;
@@ -144,7 +144,7 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
+    private boolean postPlayerAfterTheFirstLogin(String id, String idSocialMedia, String firstName, String surname, String name, String personPhoto, String token) {
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         Call<List<PlayersDataAPI>> call = jsonKnowMoreAPI.getPlayersData();
