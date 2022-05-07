@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Dodać moduł usuwania użytkonika z listy po potwierdzeniu (eliminacja missclicku).
     //TODO: Odśiweżanie listy (pullToRefresh i może coś automatycznego).
     AutoCompleteTextView autoCompleteTextView;
-    ArrayList<String> players = new ArrayList<String>();
+    ArrayList<String> players = new ArrayList<>();
 
     ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViewArrayList;
-    ArrayList<String> idSocialMediaList = new ArrayList<String>();
+    ArrayList<String> idSocialMediaList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PlayerFriendAdapterRecyclerView adapterRecyclerView;
     private RecyclerView.LayoutManager layoutManagerRecyclerView;
@@ -64,17 +64,17 @@ public class MainActivity extends AppCompatActivity {
     private String myAvatar;
     //----------------------------------------------------------------------------------------------
     //Questions
-    public ArrayList<Integer> idQuestions = new ArrayList<Integer>();
-    public ArrayList<String> questionsEN = new ArrayList<String>();
-    public ArrayList<String> answerOneEN = new ArrayList<String>();
-    public ArrayList<String> answerTwoEN = new ArrayList<String>();
-    public ArrayList<String> answerThreeEN = new ArrayList<String>();
-    public ArrayList<String> answerFourEN = new ArrayList<String>();
-    public ArrayList<String> questionsPL = new ArrayList<String>();
-    public ArrayList<String> answerOnePL = new ArrayList<String>();
-    public ArrayList<String> answerTwoPL = new ArrayList<String>();
-    public ArrayList<String> answerThreePL = new ArrayList<String>();
-    public ArrayList<String> answerFourPL = new ArrayList<String>();
+    public ArrayList<Integer> idQuestions = new ArrayList<>();
+    public ArrayList<String> questionsEN = new ArrayList<>();
+    public ArrayList<String> answerOneEN = new ArrayList<>();
+    public ArrayList<String> answerTwoEN = new ArrayList<>();
+    public ArrayList<String> answerThreeEN = new ArrayList<>();
+    public ArrayList<String> answerFourEN = new ArrayList<>();
+    public ArrayList<String> questionsPL = new ArrayList<>();
+    public ArrayList<String> answerOnePL = new ArrayList<>();
+    public ArrayList<String> answerTwoPL = new ArrayList<>();
+    public ArrayList<String> answerThreePL = new ArrayList<>();
+    public ArrayList<String> answerFourPL = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Po dodaniu ustawić listę na pusty string.
         //TODO: Od znaku # ukryć tekst w prawo.
         autoCompleteTextView = findViewById(R.id.editTextTextPersonName);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, players);
 
         autoCompleteTextView.setAdapter(arrayAdapter);
