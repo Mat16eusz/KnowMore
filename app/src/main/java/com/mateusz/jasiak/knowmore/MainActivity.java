@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> answerTwoPL = new ArrayList<>();
     public ArrayList<String> answerThreePL = new ArrayList<>();
     public ArrayList<String> answerFourPL = new ArrayList<>();
+    //----------------------------------------------------------------------------------------------
+    //Questions
+    public ArrayList<String> whoseTurn = new ArrayList<>();
+    public ArrayList<String> whoseTurnFriendIdSocialMedia = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         //Otrzymanie zaproszeń
         getInvitations(); //TODO: Zrobić odświeżanie i zabezpieczenie przed sytuacją, że ktoś usuwa dane aplikacji i wyślę się jeszcze raz.
         getQuestions();
+        getCurrentQuestions();
 
         //TODO: Po dodaniu ustawić listę na pusty string.
         //TODO: Od znaku # ukryć tekst w prawo.
@@ -204,23 +209,56 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 String friendIdSocialMedia = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString();
+                boolean orFirstGame = true;
+                boolean orYourTurn = false;
 
-                Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
-                intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_EN", questionsEN);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_EN", answerOneEN);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_EN", answerTwoEN);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_EN", answerThreeEN);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_EN", answerFourEN);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_PL", questionsPL);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_PL", answerOnePL);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_PL", answerTwoPL);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL", answerThreePL);
-                intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL", answerFourPL);
-                MainActivity.this.startActivity(intent);
-                //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
+                for (int i = 0; i < whoseTurn.size(); i++) {
+                    if (whoseTurn.get(i).equals(myIdSocialMedia) && whoseTurnFriendIdSocialMedia.get(i).equals(friendIdSocialMedia)) {
+                        orFirstGame = false;
+                        orYourTurn = true;
+
+                        Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
+                        intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_EN", questionsEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_EN", answerOneEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_EN", answerTwoEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_EN", answerThreeEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_EN", answerFourEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_PL", questionsPL);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_PL", answerOnePL);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_PL", answerTwoPL);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL", answerThreePL);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL", answerFourPL);
+                        MainActivity.this.startActivity(intent); //TODO: Sprawdzić czy nie trzeba wywołać finish(); - wyciek danych?
+                        //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
+                    }
+                    if (whoseTurnFriendIdSocialMedia.get(i).equals(friendIdSocialMedia)) {
+                        orFirstGame = false;
+                    }
+                }
+                if (orFirstGame) {
+                    Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
+                    intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_EN", questionsEN);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_EN", answerOneEN);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_EN", answerTwoEN);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_EN", answerThreeEN);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_EN", answerFourEN);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_PL", questionsPL);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_PL", answerOnePL);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_PL", answerTwoPL);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL", answerThreePL);
+                    intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL", answerFourPL);
+                    MainActivity.this.startActivity(intent); //TODO: Sprawdzić czy nie trzeba wywołać finish(); - wyciek danych?
+                    //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
+                }
+                if (!orFirstGame && !orYourTurn) {
+                    Toast.makeText(MainActivity.this, R.string.not_your_turn, Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -270,12 +308,14 @@ public class MainActivity extends AppCompatActivity {
                     if (counterIdSocialMedia == 0) {
                         insertItem(idSocialMedia, name, avatar);
                         sendNotificationToPlayer(friendToken, idSocialMedia, myIdSocialMedia, myName, myAvatar);
+                    } else {
+                        Toast.makeText(MainActivity.this, name + " " + getText(R.string.player_added), Toast.LENGTH_LONG).show();
                     }
                 }
             }
         } catch (Exception e) {
             Log.e("Add player to list friends", e.getMessage());
-            Toast.makeText(this, R.string.wrong_name, Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, R.string.wrong_name, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -424,6 +464,32 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<QuestionsAPI>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getCurrentQuestions() { //TODO: Zabezpieczyć gdy kolekcja jest pusta.
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
+
+        Call<List<CurrentQuestionsAPI>> call = jsonKnowMoreAPI.getCurrentQuestions();
+        call.enqueue(new Callback<List<CurrentQuestionsAPI>>() {
+            @Override
+            public void onResponse(Call<List<CurrentQuestionsAPI>> call, Response<List<CurrentQuestionsAPI>> response) {
+                if (response.code() > 399) {
+                    finish();
+                } else {
+                    List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
+
+                    for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
+                        whoseTurn.add(currentQuestionsAPIs.getFriendIdSocialMedia());
+                        whoseTurnFriendIdSocialMedia.add(currentQuestionsAPIs.getWhoseTurn());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CurrentQuestionsAPI>> call, Throwable t) {
 
             }
         });

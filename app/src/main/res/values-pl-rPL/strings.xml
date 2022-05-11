@@ -12,4 +12,6 @@
     <string name="invite_a_friend">Zaproś znajomego</string>
     <string name="wrong_name">Podałeś złą nazwę użytkownika</string>
     <string name="invite_notification">Zaproszenie do gry od</string>
+    <string name="not_your_turn">Poczekaj na swoją turę</string>
+    <string name="player_added">został już dodany</string>
 </resources>

@@ -11,4 +11,6 @@
     <string name="invite_a_friend">Invite a friend</string>
     <string name="wrong_name">You entered the wrong username</string>
     <string name="invite_notification">Invitation to the game from</string>
+    <string name="not_your_turn">Wait for your turn</string>
+    <string name="player_added">has already been added</string>
 </resources>

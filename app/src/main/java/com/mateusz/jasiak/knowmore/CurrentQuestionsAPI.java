@@ -6,51 +6,49 @@ public class CurrentQuestionsAPI {
 
     private String myIdSocialMedia;
     private String friendIdSocialMedia;
-    private boolean myActiveTurn;
-    private boolean friendActiveTurn;
-    private ArrayList<Integer> selectedQuestions = new ArrayList<Integer>();
+    private String whoseTurn;
+    private ArrayList<Integer> selectedQuestions = new ArrayList<>();
     private Integer myIdQuestionOne;
     private String myQuestionOneEN;
-    private ArrayList<String> myAnswerOneEN = new ArrayList<String>();
+    private ArrayList<String> myAnswerOneEN = new ArrayList<>();
     private String myQuestionOnePL;
-    private ArrayList<String> myAnswerOnePL = new ArrayList<String>();
+    private ArrayList<String> myAnswerOnePL = new ArrayList<>();
     private Integer myMarkedAnswerOne;
     private Integer myIdQuestionTwo;
     private String myQuestionTwoEN;
-    private ArrayList<String> myAnswerTwoEN = new ArrayList<String>();
+    private ArrayList<String> myAnswerTwoEN = new ArrayList<>();
     private String myQuestionTwoPL;
-    private ArrayList<String> myAnswerTwoPL = new ArrayList<String>();
+    private ArrayList<String> myAnswerTwoPL = new ArrayList<>();
     private Integer myMarkedAnswerTwo;
     private Integer myIdQuestionThree;
     private String myQuestionThreeEN;
-    private ArrayList<String> myAnswerThreeEN = new ArrayList<String>();
+    private ArrayList<String> myAnswerThreeEN = new ArrayList<>();
     private String myQuestionThreePL;
-    private ArrayList<String> myAnswerThreePL = new ArrayList<String>();
+    private ArrayList<String> myAnswerThreePL = new ArrayList<>();
     private Integer myMarkedAnswerThree;
     private Integer friendIdQuestionOne;
     private String friendQuestionOneEN;
-    private ArrayList<String> friendAnswerOneEN = new ArrayList<String>();
+    private ArrayList<String> friendAnswerOneEN = new ArrayList<>();
     private String friendQuestionOnePL;
-    private ArrayList<String> friendAnswerOnePL = new ArrayList<String>();
+    private ArrayList<String> friendAnswerOnePL = new ArrayList<>();
     private Integer friendMarkedAnswerOne;
     private Integer friendIdQuestionTwo;
     private String friendQuestionTwoEN;
-    private ArrayList<String> friendAnswerTwoEN = new ArrayList<String>();
+    private ArrayList<String> friendAnswerTwoEN = new ArrayList<>();
     private String friendQuestionTwoPL;
-    private ArrayList<String> friendAnswerTwoPL = new ArrayList<String>();
+    private ArrayList<String> friendAnswerTwoPL = new ArrayList<>();
     private Integer friendMarkedAnswerTwo;
     private Integer friendIdQuestionThree;
     private String friendQuestionThreeEN;
-    private ArrayList<String> friendAnswerThreeEN = new ArrayList<String>();
+    private ArrayList<String> friendAnswerThreeEN = new ArrayList<>();
     private String friendQuestionThreePL;
-    private ArrayList<String> friendAnswerThreePL = new ArrayList<String>();
+    private ArrayList<String> friendAnswerThreePL = new ArrayList<>();
     private Integer friendMarkedAnswerThree;
 
-    public CurrentQuestionsAPI(String myIdSocialMedia, String friendIdSocialMedia, boolean myActiveTurn, boolean friendActiveTurn, ArrayList<Integer> selectedQuestions, Integer myIdQuestionOne, String myQuestionOneEN, ArrayList<String> myAnswerOneEN, String myQuestionOnePL, ArrayList<String> myAnswerOnePL, Integer myMarkedAnswerOne, Integer myIdQuestionTwo, String myQuestionTwoEN, ArrayList<String> myAnswerTwoEN, String myQuestionTwoPL, ArrayList<String> myAnswerTwoPL, Integer myMarkedAnswerTwo, Integer myIdQuestionThree, String myQuestionThreeEN, ArrayList<String> myAnswerThreeEN, String myQuestionThreePL, ArrayList<String> myAnswerThreePL, Integer myMarkedAnswerThree, Integer friendIdQuestionOne, String friendQuestionOneEN, ArrayList<String> friendAnswerOneEN, String friendQuestionOnePL, ArrayList<String> friendAnswerOnePL, Integer friendMarkedAnswerOne, Integer friendIdQuestionTwo, String friendQuestionTwoEN, ArrayList<String> friendAnswerTwoEN, String friendQuestionTwoPL, ArrayList<String> friendAnswerTwoPL, Integer friendMarkedAnswerTwo, Integer friendIdQuestionThree, String friendQuestionThreeEN, ArrayList<String> friendAnswerThreeEN, String friendQuestionThreePL, ArrayList<String> friendAnswerThreePL, Integer friendMarkedAnswerThree) {
+    public CurrentQuestionsAPI(String myIdSocialMedia, String friendIdSocialMedia, String whoseTurn, ArrayList<Integer> selectedQuestions, Integer myIdQuestionOne, String myQuestionOneEN, ArrayList<String> myAnswerOneEN, String myQuestionOnePL, ArrayList<String> myAnswerOnePL, Integer myMarkedAnswerOne, Integer myIdQuestionTwo, String myQuestionTwoEN, ArrayList<String> myAnswerTwoEN, String myQuestionTwoPL, ArrayList<String> myAnswerTwoPL, Integer myMarkedAnswerTwo, Integer myIdQuestionThree, String myQuestionThreeEN, ArrayList<String> myAnswerThreeEN, String myQuestionThreePL, ArrayList<String> myAnswerThreePL, Integer myMarkedAnswerThree, Integer friendIdQuestionOne, String friendQuestionOneEN, ArrayList<String> friendAnswerOneEN, String friendQuestionOnePL, ArrayList<String> friendAnswerOnePL, Integer friendMarkedAnswerOne, Integer friendIdQuestionTwo, String friendQuestionTwoEN, ArrayList<String> friendAnswerTwoEN, String friendQuestionTwoPL, ArrayList<String> friendAnswerTwoPL, Integer friendMarkedAnswerTwo, Integer friendIdQuestionThree, String friendQuestionThreeEN, ArrayList<String> friendAnswerThreeEN, String friendQuestionThreePL, ArrayList<String> friendAnswerThreePL, Integer friendMarkedAnswerThree) {
         this.myIdSocialMedia = myIdSocialMedia;
         this.friendIdSocialMedia = friendIdSocialMedia;
-        this.myActiveTurn = myActiveTurn;
-        this.friendActiveTurn = friendActiveTurn;
+        this.whoseTurn = whoseTurn;
         this.selectedQuestions = selectedQuestions;
         this.myIdQuestionOne = myIdQuestionOne;
         this.myQuestionOneEN = myQuestionOneEN;
@@ -98,12 +96,8 @@ public class CurrentQuestionsAPI {
         return friendIdSocialMedia;
     }
 
-    public boolean isMyActiveTurn() {
-        return myActiveTurn;
-    }
-
-    public boolean isFriendActiveTurn() {
-        return friendActiveTurn;
+    public String getWhoseTurn() {
+        return whoseTurn;
     }
 
     public ArrayList<Integer> getSelectedQuestions() {
