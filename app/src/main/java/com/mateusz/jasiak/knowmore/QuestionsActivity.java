@@ -24,6 +24,7 @@ public class QuestionsActivity extends AppCompatActivity {
 
     private ArrayList<Integer> positions = new ArrayList<>(); //TODO: Pobierać dla konkretnej pary z bazy danych
     private ArrayList<Integer> myMarkedAnswer = new ArrayList<>();
+    private ArrayList<Integer> friendMarkedAnswer = new ArrayList<>();
     private int question = 0;
 
     private String myIdSocialMedia;
@@ -46,6 +47,9 @@ public class QuestionsActivity extends AppCompatActivity {
     private ArrayList<String> answerTwoPL = new ArrayList<>();
     private ArrayList<String> answerThreePL = new ArrayList<>();
     private ArrayList<String> answerFourPL = new ArrayList<>();
+    private ArrayList<String> friendReplies = new ArrayList<>();
+    private ArrayList<String> localFriendReplies = new ArrayList<>();
+    private boolean orFirstGame = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,71 +71,201 @@ public class QuestionsActivity extends AppCompatActivity {
         answerThreePL = intent.getStringArrayListExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL");
         answerFourPL = intent.getStringArrayListExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL");
 
+        friendReplies = intent.getStringArrayListExtra("KEY_FRIEND_REPLIES");
+
         questionView = findViewById(R.id.questionView);
         answerButton1 = findViewById(R.id.answerButton1);
         answerButton2 = findViewById(R.id.answerButton2);
         answerButton3 = findViewById(R.id.answerButton3);
         answerButton4 = findViewById(R.id.answerButton4);
 
-        positions.add(getQuestion());
+        if (friendReplies != null) {
+            orFirstGame = false;
+            for (int i = 0; i < friendReplies.size(); i++) {
+                if ((friendReplies.get(i).equals(myIdSocialMedia) && friendReplies.get(i + 1).equals(friendIdSocialMedia)) || (friendReplies.get(i).equals(friendIdSocialMedia) && friendReplies.get(i + 1).equals(myIdSocialMedia))) {
+                    localFriendReplies.add(friendReplies.get(i + 2));
+                    localFriendReplies.add(friendReplies.get(i + 3));
+                    localFriendReplies.add(friendReplies.get(i + 4));
+                    localFriendReplies.add(friendReplies.get(i + 5));
+                    localFriendReplies.add(friendReplies.get(i + 6));
+                    localFriendReplies.add(friendReplies.get(i + 7));
+                }
+            }
+
+            if (Locale.getDefault().getLanguage().equals("pl")) {
+                questionView.setText(questionsPL.get(Integer.parseInt(localFriendReplies.get(0))));
+                answerButton1.setText(answerOnePL.get(Integer.parseInt(localFriendReplies.get(0))));
+                answerButton2.setText(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(0))));
+                answerButton3.setText(answerThreePL.get(Integer.parseInt(localFriendReplies.get(0))));
+                answerButton4.setText(answerFourPL.get(Integer.parseInt(localFriendReplies.get(0))));
+            } else {
+                questionView.setText(questionsEN.get(Integer.parseInt(localFriendReplies.get(0))));
+                answerButton1.setText(answerOneEN.get(Integer.parseInt(localFriendReplies.get(0))));
+                answerButton2.setText(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(0))));
+                answerButton3.setText(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(0))));
+                answerButton4.setText(answerFourEN.get(Integer.parseInt(localFriendReplies.get(0))));
+            }
+        } else {
+            positions.add(getQuestion());
+        }
     }
 
     public void answerButton1(View view) {
         if (question != 2) {
-            myMarkedAnswer.add(1);
-            question++;
-            positions.add(getQuestion());
+            if (orFirstGame) {
+                myMarkedAnswer.add(1);
+                question++;
+                positions.add(getQuestion());
+            } else {
+                friendMarkedAnswer.add(1);
+                question++;
+                if (Locale.getDefault().getLanguage().equals("pl")) {
+                    questionView.setText(questionsPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton1.setText(answerOnePL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton2.setText(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton3.setText(answerThreePL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton4.setText(answerFourPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                } else {
+                    questionView.setText(questionsEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton1.setText(answerOneEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton2.setText(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton3.setText(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton4.setText(answerFourEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                }
+            }
         } else {
-            myMarkedAnswer.add(1);
-            getCurrentQuestions();
-            Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
-            QuestionsActivity.this.startActivity(intent);
+            if (orFirstGame) {
+                myMarkedAnswer.add(1);
+                getCurrentQuestions();
+                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
+                QuestionsActivity.this.startActivity(intent);
+            } else {
+                friendMarkedAnswer.add(1);
+                //getCurrentQuestions(); //Edit najprawdopodobniej do funkcji dodać parametr i przekazywać orFirstGame
+                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
+                QuestionsActivity.this.startActivity(intent);
+            }
         }
     }
 
     public void answerButton2(View view) {
         if (question != 2) {
-            myMarkedAnswer.add(2);
-            question++;
-            positions.add(getQuestion());
+            if (orFirstGame) {
+                myMarkedAnswer.add(2);
+                question++;
+                positions.add(getQuestion());
+            } else {
+                friendMarkedAnswer.add(2);
+                question++;
+                if (Locale.getDefault().getLanguage().equals("pl")) {
+                    questionView.setText(questionsPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton1.setText(answerOnePL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton2.setText(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton3.setText(answerThreePL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton4.setText(answerFourPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                } else {
+                    questionView.setText(questionsEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton1.setText(answerOneEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton2.setText(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton3.setText(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton4.setText(answerFourEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                }
+            }
         } else {
-            myMarkedAnswer.add(2);
-            getCurrentQuestions();
-            Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
-            QuestionsActivity.this.startActivity(intent);
+            if (orFirstGame) {
+                myMarkedAnswer.add(2);
+                getCurrentQuestions();
+                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
+                QuestionsActivity.this.startActivity(intent);
+            } else {
+                friendMarkedAnswer.add(2);
+                //getCurrentQuestions(); //Edit najprawdopodobniej do funkcji dodać parametr i przekazywać orFirstGame
+                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
+                QuestionsActivity.this.startActivity(intent);
+            }
         }
     }
 
     public void answerButton3(View view) {
         if (question != 2) {
-            myMarkedAnswer.add(3);
-            question++;
-            positions.add(getQuestion());
+            if (orFirstGame) {
+                myMarkedAnswer.add(3);
+                question++;
+                positions.add(getQuestion());
+            } else {
+                friendMarkedAnswer.add(3);
+                question++;
+                if (Locale.getDefault().getLanguage().equals("pl")) {
+                    questionView.setText(questionsPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton1.setText(answerOnePL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton2.setText(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton3.setText(answerThreePL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton4.setText(answerFourPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                } else {
+                    questionView.setText(questionsEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton1.setText(answerOneEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton2.setText(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton3.setText(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton4.setText(answerFourEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                }
+            }
         } else {
-            myMarkedAnswer.add(3);
-            getCurrentQuestions();
-            Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
-            QuestionsActivity.this.startActivity(intent);
+            if (orFirstGame) {
+                myMarkedAnswer.add(3);
+                getCurrentQuestions();
+                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
+                QuestionsActivity.this.startActivity(intent);
+            } else {
+                friendMarkedAnswer.add(3);
+                //getCurrentQuestions(); //Edit najprawdopodobniej do funkcji dodać parametr i przekazywać orFirstGame
+                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
+                QuestionsActivity.this.startActivity(intent);
+            }
         }
     }
 
     public void answerButton4(View view) {
         if (question != 2) {
-            myMarkedAnswer.add(4);
-            question++;
-            positions.add(getQuestion());
+            if (orFirstGame) {
+                myMarkedAnswer.add(4);
+                question++;
+                positions.add(getQuestion());
+            } else {
+                friendMarkedAnswer.add(4);
+                question++;
+                if (Locale.getDefault().getLanguage().equals("pl")) {
+                    questionView.setText(questionsPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton1.setText(answerOnePL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton2.setText(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton3.setText(answerThreePL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton4.setText(answerFourPL.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                } else {
+                    questionView.setText(questionsEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton1.setText(answerOneEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton2.setText(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton3.setText(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                    answerButton4.setText(answerFourEN.get(Integer.parseInt(localFriendReplies.get(question + question))));
+                }
+            }
         } else {
-            myMarkedAnswer.add(4);
-            getCurrentQuestions();
-            Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
-            QuestionsActivity.this.startActivity(intent);
+            if (orFirstGame) {
+                myMarkedAnswer.add(4);
+                getCurrentQuestions();
+                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
+                QuestionsActivity.this.startActivity(intent);
+            } else {
+                friendMarkedAnswer.add(4);
+                //getCurrentQuestions(); //Edit najprawdopodobniej do funkcji dodać parametr i przekazywać orFirstGame
+                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
+                QuestionsActivity.this.startActivity(intent);
+            }
         }
     }
 
     private void getCurrentQuestions() { //TODO: Zabezpieczyć gdy kolekcja jest pusta.
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
-        Call<List<CurrentQuestionsAPI>> call = jsonKnowMoreAPI.getCurrentQuestions();
+        Call<List<CurrentQuestionsAPI>> call = jsonKnowMoreAPI.getWhoIsTurn();
         call.enqueue(new Callback<List<CurrentQuestionsAPI>>() {
             @Override
             public void onResponse(Call<List<CurrentQuestionsAPI>> call, Response<List<CurrentQuestionsAPI>> response) {

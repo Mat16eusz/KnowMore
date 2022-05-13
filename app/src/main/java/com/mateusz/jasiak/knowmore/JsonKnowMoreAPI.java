@@ -36,7 +36,10 @@ public interface JsonKnowMoreAPI {
     Call<List<QuestionsAPI>> getQuestions();
 
     @GET("currentQuestions")
-    Call<List<CurrentQuestionsAPI>> getCurrentQuestions();
+    Call<List<CurrentQuestionsAPI>> getWhoIsTurn();
+
+    @GET("currentQuestions")
+    Call<List<CurrentQuestionsAPI>> getCurrentQuestion();
 
     @POST("currentQuestions")
     Call<CurrentQuestionsAPI> addCurrentQuestions(@Body CurrentQuestionsAPI currentQuestionsAPI);
