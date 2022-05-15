@@ -20,27 +20,27 @@ import java.util.Map;
 
 public class FCMNotificationSend {
 
-    String userFcmToken;
+    String userFCMToken;
     String title;
-    Context mContext;
-    Activity mActivity;
+    Context context;
+    Activity activity;
 
     private RequestQueue requestQueue;
     private final String postUrl = "https://fcm.googleapis.com/fcm/send";
-    private final String fcmServerKey ="AAAAj0J3aTs:APA91bGAsOiXYyCgE4_LkhiTY7r0IeSpvyjYCO2py500oTRNVVPwsM1CEfoHJuo9HrqqHU5IOYSdN__KtB2QbtTnfBIlW0QD4yr0wfjZRdrIPu9NXNgyhyJiRhxziBaRFd-Q_cItKRNx";
+    private final String FCMServerKey = BuildConfig.FCM_SERVER_KEY;
 
-    public FCMNotificationSend(String userFcmToken, String title, Context mContext, Activity mActivity) {
-        this.userFcmToken = userFcmToken;
+    public FCMNotificationSend(String userFCMToken, String title, Context context, Activity activity) {
+        this.userFCMToken = userFCMToken;
         this.title = title;
-        this.mContext = mContext;
-        this.mActivity = mActivity;
+        this.context = context;
+        this.activity = activity;
     }
 
     public void SendNotifications() {
-        requestQueue = Volley.newRequestQueue(mActivity);
+        requestQueue = Volley.newRequestQueue(activity);
         JSONObject mainObj = new JSONObject();
         try {
-            mainObj.put("to", userFcmToken);
+            mainObj.put("to", userFCMToken);
             JSONObject notiObject = new JSONObject();
             notiObject.put("title", title);
             notiObject.put("icon", R.drawable.ic_launcher_background);
@@ -63,7 +63,7 @@ public class FCMNotificationSend {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> header = new HashMap<>();
                     header.put("content-type", "application/json");
-                    header.put("authorization", "key=" + fcmServerKey);
+                    header.put("authorization", "key=" + FCMServerKey);
 
                     return header;
                 }
