@@ -27,7 +27,7 @@ public class FCMNotificationSend {
 
     private RequestQueue requestQueue;
     private final String postUrl = "https://fcm.googleapis.com/fcm/send";
-    private final String FCMServerKey = BuildConfig.FCM_SERVER_KEY;
+    String FCMServerKey = BuildConfig.FCM_SERVER_KEY;
 
     public FCMNotificationSend(String userFCMToken, String title, Context context, Activity activity) {
         this.userFCMToken = userFCMToken;
