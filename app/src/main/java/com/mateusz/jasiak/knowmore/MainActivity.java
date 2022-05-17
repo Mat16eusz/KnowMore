@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> whoseTurn = new ArrayList<>();
     public ArrayList<String> whoseTurnFriendIdSocialMedia = new ArrayList<>();
     public ArrayList<String> friendReplies = new ArrayList<>();
+    public ArrayList<ArrayList<String>> selectedQuestions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL", answerFourPL);
 
                         intent.putExtra("KEY_FRIEND_REPLIES", friendReplies);
+                        intent.putExtra("KEY_SELECTED_QUESTIONS", selectedQuestions);
                         MainActivity.this.startActivity(intent); //TODO: Sprawdzić czy nie trzeba wywołać finish(); - wyciek danych?
                         //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
                     }
@@ -385,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                     for (PlayerInvitationAPI playerInvitationAPIs : playerInvitationAPI) {
                         if (myIdSocialMedia.equals(playerInvitationAPIs.getMyIdSocialMedia())) {
                             insertItem(playerInvitationAPIs.getIdSocialMedia(), playerInvitationAPIs.getName(), playerInvitationAPIs.getPersonPhoto());
-                            deletePost(playerInvitationAPIs.getId());
+                            deletePlayerInvite(playerInvitationAPIs.getId());
                         }
                     }
                 }
@@ -420,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void deletePost(String id) {
+    private void deletePlayerInvite(String id) {
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         Call<Void> call = jsonKnowMoreAPI.deletePlayerInvite(id);
@@ -512,6 +514,7 @@ public class MainActivity extends AppCompatActivity {
                     List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
 
                     for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
+                        friendReplies.add(currentQuestionsAPIs.getId());
                         friendReplies.add(currentQuestionsAPIs.getMyIdSocialMedia());
                         friendReplies.add(currentQuestionsAPIs.getFriendIdSocialMedia());
                         friendReplies.add(currentQuestionsAPIs.getMyIdQuestionOne().toString());
@@ -520,6 +523,8 @@ public class MainActivity extends AppCompatActivity {
                         friendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerTwo().toString());
                         friendReplies.add(currentQuestionsAPIs.getMyIdQuestionThree().toString());
                         friendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerThree().toString());
+
+                        selectedQuestions.add(currentQuestionsAPIs.getSelectedQuestions());
                     }
                 }
             }

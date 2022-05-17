@@ -222,7 +222,7 @@ public class StartActivity extends AppCompatActivity {
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         PlayersDataAPI playersDataAPI = new PlayersDataAPI(idSocialMedia, token);
-        Call<PlayersDataAPI> call = jsonKnowMoreAPI.putPlayer(idSocialMedia, playersDataAPI);
+        Call<PlayersDataAPI> call = jsonKnowMoreAPI.updatePlayer(idSocialMedia, playersDataAPI);
         call.enqueue(new Callback<PlayersDataAPI>() {
             @Override
             public void onResponse(Call<PlayersDataAPI> call, Response<PlayersDataAPI> response) {

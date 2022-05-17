@@ -21,7 +21,7 @@ public interface JsonKnowMoreAPI {
     Call<PlayersDataAPI> addPlayer(@Body PlayersDataAPI playersDataAPI);
 
     @PUT("players/{id}")
-    Call<PlayersDataAPI> putPlayer(@Path("id") String id, @Body PlayersDataAPI playersDataAPI);
+    Call<PlayersDataAPI> updatePlayer(@Path("id") String id, @Body PlayersDataAPI playersDataAPI);
 
     @GET("invitations")
     Call<List<PlayerInvitationAPI>> getPlayerInvitation();
@@ -43,4 +43,7 @@ public interface JsonKnowMoreAPI {
 
     @POST("currentQuestions")
     Call<CurrentQuestionsAPI> addCurrentQuestions(@Body CurrentQuestionsAPI currentQuestionsAPI);
+
+    @PUT("currentQuestions/{id}")
+    Call<CurrentQuestionsAPI> updateCurrentQuestion(@Path("id") String id, @Body CurrentQuestionsAPI currentQuestionsAPI);
 }

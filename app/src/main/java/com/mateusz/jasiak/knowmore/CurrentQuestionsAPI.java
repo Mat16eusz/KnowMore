@@ -4,28 +4,32 @@ import java.util.ArrayList;
 
 public class CurrentQuestionsAPI {
 
+    private String _id;
     private String myIdSocialMedia;
     private String friendIdSocialMedia;
     private String whoseTurn;
-    private ArrayList<Integer> selectedQuestions = new ArrayList<>();
+    private ArrayList<String> selectedQuestions = new ArrayList<>();
     private Integer myIdQuestionOne;
     private String myQuestionOneEN;
     private ArrayList<String> myAnswerOneEN = new ArrayList<>();
     private String myQuestionOnePL;
     private ArrayList<String> myAnswerOnePL = new ArrayList<>();
     private Integer myMarkedAnswerOne;
+    private Integer myFriendMarkedAnswerOne;
     private Integer myIdQuestionTwo;
     private String myQuestionTwoEN;
     private ArrayList<String> myAnswerTwoEN = new ArrayList<>();
     private String myQuestionTwoPL;
     private ArrayList<String> myAnswerTwoPL = new ArrayList<>();
     private Integer myMarkedAnswerTwo;
+    private Integer myFriendMarkedAnswerTwo;
     private Integer myIdQuestionThree;
     private String myQuestionThreeEN;
     private ArrayList<String> myAnswerThreeEN = new ArrayList<>();
     private String myQuestionThreePL;
     private ArrayList<String> myAnswerThreePL = new ArrayList<>();
     private Integer myMarkedAnswerThree;
+    private Integer myFriendMarkedAnswerThree;
     private Integer friendIdQuestionOne;
     private String friendQuestionOneEN;
     private ArrayList<String> friendAnswerOneEN = new ArrayList<>();
@@ -45,7 +49,7 @@ public class CurrentQuestionsAPI {
     private ArrayList<String> friendAnswerThreePL = new ArrayList<>();
     private Integer friendMarkedAnswerThree;
 
-    public CurrentQuestionsAPI(String myIdSocialMedia, String friendIdSocialMedia, String whoseTurn, ArrayList<Integer> selectedQuestions, Integer myIdQuestionOne, String myQuestionOneEN, ArrayList<String> myAnswerOneEN, String myQuestionOnePL, ArrayList<String> myAnswerOnePL, Integer myMarkedAnswerOne, Integer myIdQuestionTwo, String myQuestionTwoEN, ArrayList<String> myAnswerTwoEN, String myQuestionTwoPL, ArrayList<String> myAnswerTwoPL, Integer myMarkedAnswerTwo, Integer myIdQuestionThree, String myQuestionThreeEN, ArrayList<String> myAnswerThreeEN, String myQuestionThreePL, ArrayList<String> myAnswerThreePL, Integer myMarkedAnswerThree, Integer friendIdQuestionOne, String friendQuestionOneEN, ArrayList<String> friendAnswerOneEN, String friendQuestionOnePL, ArrayList<String> friendAnswerOnePL, Integer friendMarkedAnswerOne, Integer friendIdQuestionTwo, String friendQuestionTwoEN, ArrayList<String> friendAnswerTwoEN, String friendQuestionTwoPL, ArrayList<String> friendAnswerTwoPL, Integer friendMarkedAnswerTwo, Integer friendIdQuestionThree, String friendQuestionThreeEN, ArrayList<String> friendAnswerThreeEN, String friendQuestionThreePL, ArrayList<String> friendAnswerThreePL, Integer friendMarkedAnswerThree) {
+    public CurrentQuestionsAPI(String myIdSocialMedia, String friendIdSocialMedia, String whoseTurn, ArrayList<String> selectedQuestions, Integer myIdQuestionOne, String myQuestionOneEN, ArrayList<String> myAnswerOneEN, String myQuestionOnePL, ArrayList<String> myAnswerOnePL, Integer myMarkedAnswerOne, Integer myFriendMarkedAnswerOne, Integer myIdQuestionTwo, String myQuestionTwoEN, ArrayList<String> myAnswerTwoEN, String myQuestionTwoPL, ArrayList<String> myAnswerTwoPL, Integer myMarkedAnswerTwo, Integer myFriendMarkedAnswerTwo, Integer myIdQuestionThree, String myQuestionThreeEN, ArrayList<String> myAnswerThreeEN, String myQuestionThreePL, ArrayList<String> myAnswerThreePL, Integer myMarkedAnswerThree, Integer myFriendMarkedAnswerThree, Integer friendIdQuestionOne, String friendQuestionOneEN, ArrayList<String> friendAnswerOneEN, String friendQuestionOnePL, ArrayList<String> friendAnswerOnePL, Integer friendMarkedAnswerOne, Integer friendIdQuestionTwo, String friendQuestionTwoEN, ArrayList<String> friendAnswerTwoEN, String friendQuestionTwoPL, ArrayList<String> friendAnswerTwoPL, Integer friendMarkedAnswerTwo, Integer friendIdQuestionThree, String friendQuestionThreeEN, ArrayList<String> friendAnswerThreeEN, String friendQuestionThreePL, ArrayList<String> friendAnswerThreePL, Integer friendMarkedAnswerThree) {
         this.myIdSocialMedia = myIdSocialMedia;
         this.friendIdSocialMedia = friendIdSocialMedia;
         this.whoseTurn = whoseTurn;
@@ -56,18 +60,21 @@ public class CurrentQuestionsAPI {
         this.myQuestionOnePL = myQuestionOnePL;
         this.myAnswerOnePL = myAnswerOnePL;
         this.myMarkedAnswerOne = myMarkedAnswerOne;
+        this.myFriendMarkedAnswerOne = myFriendMarkedAnswerOne;
         this.myIdQuestionTwo = myIdQuestionTwo;
         this.myQuestionTwoEN = myQuestionTwoEN;
         this.myAnswerTwoEN = myAnswerTwoEN;
         this.myQuestionTwoPL = myQuestionTwoPL;
         this.myAnswerTwoPL = myAnswerTwoPL;
         this.myMarkedAnswerTwo = myMarkedAnswerTwo;
+        this.myFriendMarkedAnswerTwo = myFriendMarkedAnswerTwo;
         this.myIdQuestionThree = myIdQuestionThree;
         this.myQuestionThreeEN = myQuestionThreeEN;
         this.myAnswerThreeEN = myAnswerThreeEN;
         this.myQuestionThreePL = myQuestionThreePL;
         this.myAnswerThreePL = myAnswerThreePL;
         this.myMarkedAnswerThree = myMarkedAnswerThree;
+        this.myFriendMarkedAnswerThree = myFriendMarkedAnswerThree;
         this.friendIdQuestionOne = friendIdQuestionOne;
         this.friendQuestionOneEN = friendQuestionOneEN;
         this.friendAnswerOneEN = friendAnswerOneEN;
@@ -88,6 +95,41 @@ public class CurrentQuestionsAPI {
         this.friendMarkedAnswerThree = friendMarkedAnswerThree;
     }
 
+    public CurrentQuestionsAPI(String whoseTurn, ArrayList<String> selectedQuestions, Integer myFriendMarkedAnswerOne, Integer myFriendMarkedAnswerTwo, Integer myFriendMarkedAnswerThree, Integer friendIdQuestionOne, String friendQuestionOneEN, ArrayList<String> friendAnswerOneEN, String friendQuestionOnePL, ArrayList<String> friendAnswerOnePL, Integer friendMarkedAnswerOne, Integer friendIdQuestionTwo, String friendQuestionTwoEN, ArrayList<String> friendAnswerTwoEN, String friendQuestionTwoPL, ArrayList<String> friendAnswerTwoPL, Integer friendMarkedAnswerTwo, Integer friendIdQuestionThree, String friendQuestionThreeEN, ArrayList<String> friendAnswerThreeEN, String friendQuestionThreePL, ArrayList<String> friendAnswerThreePL, Integer friendMarkedAnswerThree) {
+        this.whoseTurn = whoseTurn;
+        this.selectedQuestions = selectedQuestions;
+        this.myFriendMarkedAnswerOne = myFriendMarkedAnswerOne;
+        this.myFriendMarkedAnswerTwo = myFriendMarkedAnswerTwo;
+        this.myFriendMarkedAnswerThree = myFriendMarkedAnswerThree;
+        this.friendIdQuestionOne = friendIdQuestionOne;
+        this.friendQuestionOneEN = friendQuestionOneEN;
+        this.friendAnswerOneEN = friendAnswerOneEN;
+        this.friendQuestionOnePL = friendQuestionOnePL;
+        this.friendAnswerOnePL = friendAnswerOnePL;
+        this.friendMarkedAnswerOne = friendMarkedAnswerOne;
+        this.friendIdQuestionTwo = friendIdQuestionTwo;
+        this.friendQuestionTwoEN = friendQuestionTwoEN;
+        this.friendAnswerTwoEN = friendAnswerTwoEN;
+        this.friendQuestionTwoPL = friendQuestionTwoPL;
+        this.friendAnswerTwoPL = friendAnswerTwoPL;
+        this.friendMarkedAnswerTwo = friendMarkedAnswerTwo;
+        this.friendIdQuestionThree = friendIdQuestionThree;
+        this.friendQuestionThreeEN = friendQuestionThreeEN;
+        this.friendAnswerThreeEN = friendAnswerThreeEN;
+        this.friendQuestionThreePL = friendQuestionThreePL;
+        this.friendAnswerThreePL = friendAnswerThreePL;
+        this.friendMarkedAnswerThree = friendMarkedAnswerThree;
+    }
+
+    public CurrentQuestionsAPI(String whoseTurn) {
+        this.whoseTurn = whoseTurn;
+
+    }
+
+    public String getId() {
+        return _id;
+    }
+
     public String getMyIdSocialMedia() {
         return myIdSocialMedia;
     }
@@ -100,7 +142,7 @@ public class CurrentQuestionsAPI {
         return whoseTurn;
     }
 
-    public ArrayList<Integer> getSelectedQuestions() {
+    public ArrayList<String> getSelectedQuestions() {
         return selectedQuestions;
     }
 
@@ -128,6 +170,10 @@ public class CurrentQuestionsAPI {
         return myMarkedAnswerOne;
     }
 
+    public Integer getMyFriendMarkedAnswerOne() {
+        return myFriendMarkedAnswerOne;
+    }
+
     public Integer getMyIdQuestionTwo() {
         return myIdQuestionTwo;
     }
@@ -152,6 +198,10 @@ public class CurrentQuestionsAPI {
         return myMarkedAnswerTwo;
     }
 
+    public Integer getMyFriendMarkedAnswerTwo() {
+        return myFriendMarkedAnswerTwo;
+    }
+
     public Integer getMyIdQuestionThree() {
         return myIdQuestionThree;
     }
@@ -174,6 +224,10 @@ public class CurrentQuestionsAPI {
 
     public Integer getMyMarkedAnswerThree() {
         return myMarkedAnswerThree;
+    }
+
+    public Integer getMyFriendMarkedAnswerThree() {
+        return myFriendMarkedAnswerThree;
     }
 
     public Integer getFriendIdQuestionOne() {
