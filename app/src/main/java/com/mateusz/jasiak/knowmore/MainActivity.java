@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     //Questions
     public ArrayList<String> whoseTurn = new ArrayList<>();
     public ArrayList<String> whoseTurnFriendIdSocialMedia = new ArrayList<>();
+    public ArrayList<Boolean> gameProper = new ArrayList<>();
     public ArrayList<String> friendReplies = new ArrayList<>();
     public ArrayList<ArrayList<String>> selectedQuestions = new ArrayList<>();
 
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean orYourTurn = false;
 
                 for (int i = 0; i < whoseTurn.size(); i++) {
-                    if (whoseTurn.get(i).equals(myIdSocialMedia) && whoseTurnFriendIdSocialMedia.get(i).equals(myIdSocialMedia)) {
+                    if (whoseTurn.get(i).equals(myIdSocialMedia) && whoseTurnFriendIdSocialMedia.get(i).equals(myIdSocialMedia) && gameProper.get(i)) {
                         orFirstGame = false;
                         orYourTurn = true;
 
@@ -237,6 +238,29 @@ public class MainActivity extends AppCompatActivity {
 
                         intent.putExtra("KEY_FRIEND_REPLIES", friendReplies);
                         intent.putExtra("KEY_SELECTED_QUESTIONS", selectedQuestions);
+                        MainActivity.this.startActivity(intent); //TODO: Sprawdzić czy nie trzeba wywołać finish(); - wyciek danych?
+                        //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
+                    }
+                    if (whoseTurn.get(i).equals(myIdSocialMedia) && whoseTurnFriendIdSocialMedia.get(i).equals(myIdSocialMedia) && !gameProper.get(i)) {
+                        orFirstGame = false;
+                        orYourTurn = true;
+
+                        Intent intent = new Intent(MainActivity.this, FirstGameFriendActivity.class);
+                        intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_EN", questionsEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_EN", answerOneEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_EN", answerTwoEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_EN", answerThreeEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_EN", answerFourEN);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_QUESTIONS_PL", questionsPL);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_ONE_PL", answerOnePL);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_TWO_PL", answerTwoPL);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL", answerThreePL);
+                        intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL", answerFourPL);
+
+                        intent.putExtra("KEY_FRIEND_REPLIES", friendReplies);
                         MainActivity.this.startActivity(intent); //TODO: Sprawdzić czy nie trzeba wywołać finish(); - wyciek danych?
                         //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
                     }
@@ -490,6 +514,7 @@ public class MainActivity extends AppCompatActivity {
                     for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
                         whoseTurn.add(currentQuestionsAPIs.getFriendIdSocialMedia());
                         whoseTurnFriendIdSocialMedia.add(currentQuestionsAPIs.getWhoseTurn());
+                        gameProper.add(currentQuestionsAPIs.getGameProper());
                     }
                 }
             }

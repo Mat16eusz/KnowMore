@@ -26,6 +26,7 @@ public class QuestionsActivity extends AppCompatActivity {
     private ArrayList<String> positions = new ArrayList<>(); //TODO: Pobierać dla konkretnej pary z bazy danych
     private ArrayList<Integer> myMarkedAnswer = new ArrayList<>();
     private ArrayList<Integer> myFriendMarkedAnswer = new ArrayList<>();
+    private ArrayList<Integer> friendMarkedAnswer = new ArrayList<>();
     private int question = 0;
     private int markedAnswer = 0;
 
@@ -422,7 +423,7 @@ public class QuestionsActivity extends AppCompatActivity {
         myAnswerThreePL.add(answerThreePL.get(Integer.parseInt(positions.get(4))));
         myAnswerThreePL.add(answerFourPL.get(Integer.parseInt(positions.get(4))));
 
-        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(myIdSocialMedia, friendIdSocialMedia, friendIdSocialMedia, positions, Integer.parseInt(positions.get(2)), questionsEN.get(Integer.parseInt(positions.get(2))), myAnswerOneEN, questionsPL.get(Integer.parseInt(positions.get(2))), myAnswerOnePL, myMarkedAnswer.get(0), null, Integer.parseInt(positions.get(3)), questionsEN.get(Integer.parseInt(positions.get(3))), myAnswerTwoEN, questionsPL.get(Integer.parseInt(positions.get(3))), myAnswerTwoPL, myMarkedAnswer.get(1), null, Integer.parseInt(positions.get(4)), questionsEN.get(Integer.parseInt(positions.get(4))), myAnswerThreeEN, questionsPL.get(Integer.parseInt(positions.get(4))), myAnswerThreePL, myMarkedAnswer.get(2), null, /*friend*/ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null); //TODO: Nulle zamienić.
+        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(myIdSocialMedia, friendIdSocialMedia, friendIdSocialMedia, false, positions, Integer.parseInt(positions.get(2)), questionsEN.get(Integer.parseInt(positions.get(2))), myAnswerOneEN, questionsPL.get(Integer.parseInt(positions.get(2))), myAnswerOnePL, myMarkedAnswer.get(0), null, Integer.parseInt(positions.get(3)), questionsEN.get(Integer.parseInt(positions.get(3))), myAnswerTwoEN, questionsPL.get(Integer.parseInt(positions.get(3))), myAnswerTwoPL, myMarkedAnswer.get(1), null, Integer.parseInt(positions.get(4)), questionsEN.get(Integer.parseInt(positions.get(4))), myAnswerThreeEN, questionsPL.get(Integer.parseInt(positions.get(4))), myAnswerThreePL, myMarkedAnswer.get(2), null, /*friend*/ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null); //TODO: Nulle zamienić.
         Call<CurrentQuestionsAPI> call = jsonKnowMoreAPI.addCurrentQuestions(currentQuestionsAPI);
         call.enqueue(new Callback<CurrentQuestionsAPI>() {
             @Override
@@ -445,7 +446,7 @@ public class QuestionsActivity extends AppCompatActivity {
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         // TODO: positionI + 1 usunąć +1 z parametru.
-        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, selectedQuestions.get(positionI + 1), myFriendMarkedAnswer.get(0), myFriendMarkedAnswer.get(1), myFriendMarkedAnswer.get(2), /*friend*/ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, true, positions, myFriendMarkedAnswer.get(0), myFriendMarkedAnswer.get(1), myFriendMarkedAnswer.get(2), /*friend*/ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         Call<CurrentQuestionsAPI> call = jsonKnowMoreAPI.updateCurrentQuestion(idCurrentQuestion, currentQuestionsAPI);
         call.enqueue(new Callback<CurrentQuestionsAPI>() {
             @Override

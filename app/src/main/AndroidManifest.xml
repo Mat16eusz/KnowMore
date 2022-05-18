@@ -14,10 +14,15 @@
         android:theme="@style/Theme.KnowMore"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".FirstQuestionsActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FirstQuestionsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FirstGameFriendActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
