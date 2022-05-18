@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if (orFirstGame) {
-                    Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
+                    Intent intent = new Intent(MainActivity.this, FirstQuestionsActivity.class);
                     intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
                     intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
                     intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);

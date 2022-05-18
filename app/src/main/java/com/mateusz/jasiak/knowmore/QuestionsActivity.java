@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -217,10 +216,6 @@ public class QuestionsActivity extends AppCompatActivity {
                         QuestionsActivity.this.startActivity(intent);
                     }
                 }, delayMillis);
-                /*updateCurrentQuestion();
-                //getCurrentQuestions(); //TODO: Edit najprawdopodobniej do funkcji dodać parametr i przekazywać orFirstGame
-                Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
-                QuestionsActivity.this.startActivity(intent);*/
             }
         }
     }
@@ -321,20 +316,28 @@ public class QuestionsActivity extends AppCompatActivity {
                     if ((selectedQuestions.get(i).get(j).equals(myIdSocialMedia) && selectedQuestions.get(i).get(j + 1).equals(friendIdSocialMedia)) || (selectedQuestions.get(i).get(j).equals(friendIdSocialMedia) && selectedQuestions.get(i).get(j + 1).equals(myIdSocialMedia))) {
                         positionI = i;
 
-                        /*selectedQuestions.get(i).add(myIdSocialMedia);
-                        selectedQuestions.get(i).add(friendIdSocialMedia);*/
-
                         position = random.nextInt(idQuestions.size());
-                        if (question == 1) {
+                        if (question == 2) {
+                            position = random.nextInt(idQuestions.size());
+                            int k = 0;
+                            while (selectedQuestions.get(i).get(k).equals(position.toString())) {
+                                if (k == selectedQuestions.get(i).size()) {
+                                    break;
+                                }
+                                position = random.nextInt(idQuestions.size());
+                                k++;
+                            }
+                        }
+                        /*if (question == 3) {
                             while (Integer.parseInt(positions.get(2)) == position) {
                                 position = random.nextInt(idQuestions.size());
                             }
                         }
-                        if (question == 2) {
+                        if (question == 4) {
                             while (Integer.parseInt(positions.get(2)) == position || Integer.parseInt(positions.get(3)) == position) {
                                 position = random.nextInt(idQuestions.size());
                             }
-                        }
+                        }*/
 
                         if (Locale.getDefault().getLanguage().equals("pl")) {
                             questionView.setText(questionsPL.get(position));
@@ -440,11 +443,6 @@ public class QuestionsActivity extends AppCompatActivity {
 
     private void updateCurrentQuestion() {
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
-
-        /*if (!selectedQuestions.get(positionI).get(0).equals(myIdSocialMedia) || !selectedQuestions.get(positionI).get(0).equals(friendIdSocialMedia)) {
-            selectedQuestions.get(positionI).add(myIdSocialMedia);
-            selectedQuestions.get(positionI).add(friendIdSocialMedia);
-        }*/
 
         // TODO: positionI + 1 usunąć +1 z parametru.
         CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, selectedQuestions.get(positionI + 1), myFriendMarkedAnswer.get(0), myFriendMarkedAnswer.get(1), myFriendMarkedAnswer.get(2), /*friend*/ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);

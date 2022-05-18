@@ -11,8 +11,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.KnowMore">
+        android:theme="@style/Theme.KnowMore"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".FirstQuestionsActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
@@ -32,7 +35,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".FCMNotificationService" android:exported="false">
+        <service
+            android:name=".FCMNotificationService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
