@@ -75,7 +75,7 @@ public class FirstGameFriendActivity extends AppCompatActivity {
         answerThreePL = intent.getStringArrayListExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL");
         answerFourPL = intent.getStringArrayListExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL");
 
-        friendReplies = intent.getStringArrayListExtra("KEY_FRIEND_REPLIES");
+        friendReplies = intent.getStringArrayListExtra("KEY_MY_FRIEND_REPLIES");
 
         questionView = findViewById(R.id.questionView);
         answerButton1 = findViewById(R.id.answerButton1);
@@ -284,38 +284,38 @@ public class FirstGameFriendActivity extends AppCompatActivity {
     private void updateCurrentQuestion() {
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
-        ArrayList<String> myAnswerOneEN = new ArrayList<>();
-        myAnswerOneEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(0))));
-        myAnswerOneEN.add(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(0))));
-        myAnswerOneEN.add(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(0))));
-        myAnswerOneEN.add(answerFourEN.get(Integer.parseInt(localFriendReplies.get(0))));
-        ArrayList<String> myAnswerOnePL = new ArrayList<>();
-        myAnswerOnePL.add(answerOnePL.get(Integer.parseInt(localFriendReplies.get(0))));
-        myAnswerOnePL.add(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(0))));
-        myAnswerOnePL.add(answerThreePL.get(Integer.parseInt(localFriendReplies.get(0))));
-        myAnswerOnePL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(0))));
-        ArrayList<String> myAnswerTwoEN = new ArrayList<>();
-        myAnswerTwoEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(2))));
-        myAnswerTwoEN.add(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(2))));
-        myAnswerTwoEN.add(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(2))));
-        myAnswerTwoEN.add(answerFourEN.get(Integer.parseInt(localFriendReplies.get(2))));
-        ArrayList<String> myAnswerTwoPL = new ArrayList<>();
-        myAnswerTwoPL.add(answerOnePL.get(Integer.parseInt(localFriendReplies.get(2))));
-        myAnswerTwoPL.add(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(2))));
-        myAnswerTwoPL.add(answerThreePL.get(Integer.parseInt(localFriendReplies.get(2))));
-        myAnswerTwoPL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(2))));
-        ArrayList<String> myAnswerThreeEN = new ArrayList<>();
-        myAnswerThreeEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(4))));
-        myAnswerThreeEN.add(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(4))));
-        myAnswerThreeEN.add(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(4))));
-        myAnswerThreeEN.add(answerFourEN.get(Integer.parseInt(localFriendReplies.get(4))));
-        ArrayList<String> myAnswerThreePL = new ArrayList<>();
-        myAnswerThreePL.add(answerOnePL.get(Integer.parseInt(localFriendReplies.get(4))));
-        myAnswerThreePL.add(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(4))));
-        myAnswerThreePL.add(answerThreePL.get(Integer.parseInt(localFriendReplies.get(4))));
-        myAnswerThreePL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(4))));
+        ArrayList<String> friendAnswerOneEN = new ArrayList<>();
+        friendAnswerOneEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(0))));
+        friendAnswerOneEN.add(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(0))));
+        friendAnswerOneEN.add(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(0))));
+        friendAnswerOneEN.add(answerFourEN.get(Integer.parseInt(localFriendReplies.get(0))));
+        ArrayList<String> friendAnswerOnePL = new ArrayList<>();
+        friendAnswerOnePL.add(answerOnePL.get(Integer.parseInt(localFriendReplies.get(0))));
+        friendAnswerOnePL.add(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(0))));
+        friendAnswerOnePL.add(answerThreePL.get(Integer.parseInt(localFriendReplies.get(0))));
+        friendAnswerOnePL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(0))));
+        ArrayList<String> friendAnswerTwoEN = new ArrayList<>();
+        friendAnswerTwoEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(2))));
+        friendAnswerTwoEN.add(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(2))));
+        friendAnswerTwoEN.add(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(2))));
+        friendAnswerTwoEN.add(answerFourEN.get(Integer.parseInt(localFriendReplies.get(2))));
+        ArrayList<String> friendAnswerTwoPL = new ArrayList<>();
+        friendAnswerTwoPL.add(answerOnePL.get(Integer.parseInt(localFriendReplies.get(2))));
+        friendAnswerTwoPL.add(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(2))));
+        friendAnswerTwoPL.add(answerThreePL.get(Integer.parseInt(localFriendReplies.get(2))));
+        friendAnswerTwoPL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(2))));
+        ArrayList<String> friendAnswerThreeEN = new ArrayList<>();
+        friendAnswerThreeEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(4))));
+        friendAnswerThreeEN.add(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(4))));
+        friendAnswerThreeEN.add(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(4))));
+        friendAnswerThreeEN.add(answerFourEN.get(Integer.parseInt(localFriendReplies.get(4))));
+        ArrayList<String> friendAnswerThreePL = new ArrayList<>();
+        friendAnswerThreePL.add(answerOnePL.get(Integer.parseInt(localFriendReplies.get(4))));
+        friendAnswerThreePL.add(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(4))));
+        friendAnswerThreePL.add(answerThreePL.get(Integer.parseInt(localFriendReplies.get(4))));
+        friendAnswerThreePL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(4))));
 
-        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, true, positions, myFriendMarkedAnswer.get(0), myFriendMarkedAnswer.get(1), myFriendMarkedAnswer.get(2), /*friend*/ idQuestions.get(Integer.parseInt(localFriendReplies.get(0))), questionsEN.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOneEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOnePL, friendMarkedAnswer.get(0), idQuestions.get(Integer.parseInt(localFriendReplies.get(2))), questionsEN.get(Integer.parseInt(localFriendReplies.get(2))), myAnswerTwoEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(2))), myAnswerTwoPL, friendMarkedAnswer.get(1), idQuestions.get(Integer.parseInt(localFriendReplies.get(4))), questionsEN.get(Integer.parseInt(localFriendReplies.get(4))), myAnswerThreeEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(4))), myAnswerThreePL, friendMarkedAnswer.get(2));
+        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, true, positions, myFriendMarkedAnswer.get(0), myFriendMarkedAnswer.get(1), myFriendMarkedAnswer.get(2), /*friend*/ idQuestions.get(Integer.parseInt(localFriendReplies.get(0))), questionsEN.get(Integer.parseInt(localFriendReplies.get(0))), friendAnswerOneEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(0))), friendAnswerOnePL, friendMarkedAnswer.get(0), idQuestions.get(Integer.parseInt(localFriendReplies.get(2))), questionsEN.get(Integer.parseInt(localFriendReplies.get(2))), friendAnswerTwoEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(2))), friendAnswerTwoPL, friendMarkedAnswer.get(1), idQuestions.get(Integer.parseInt(localFriendReplies.get(4))), questionsEN.get(Integer.parseInt(localFriendReplies.get(4))), friendAnswerThreeEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(4))), friendAnswerThreePL, friendMarkedAnswer.get(2));
         Call<CurrentQuestionsAPI> call = jsonKnowMoreAPI.updateCurrentQuestion(idCurrentQuestion, currentQuestionsAPI);
         call.enqueue(new Callback<CurrentQuestionsAPI>() {
             @Override

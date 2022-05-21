@@ -80,8 +80,14 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> whoseTurn = new ArrayList<>();
     public ArrayList<String> whoseTurnFriendIdSocialMedia = new ArrayList<>();
     public ArrayList<Boolean> gameProper = new ArrayList<>();
+    public ArrayList<String> myReplies = new ArrayList<>();
+    public ArrayList<String> myFriendReplies = new ArrayList<>();
     public ArrayList<String> friendReplies = new ArrayList<>();
     public ArrayList<ArrayList<String>> selectedQuestions = new ArrayList<>();
+
+    private ArrayList<String> myMarkedAnswer = new ArrayList<>();
+    private ArrayList<String> myFriendMarkedAnswer = new ArrayList<>();
+    private ArrayList<String> friendMarkedAnswer = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         getQuestions(); //TODO: Zrobić odświeżanie.
         getWhoIsTurn(); //TODO: Zrobić odświeżanie.
         getCurrentQuestion(); //TODO: Zrobić odświeżanie.
+        getMyAndFriendCurrentQuestion(); //TODO: Zrobić odświeżanie.
+        getMarkedAnswer(); //TODO: Zrobić odświeżanie.
 
         //TODO: Po dodaniu ustawić listę na pusty string.
         //TODO: Od znaku # ukryć tekst w prawo.
@@ -217,7 +225,8 @@ public class MainActivity extends AppCompatActivity {
                 boolean orYourTurn = false;
 
                 for (int i = 0; i < whoseTurn.size(); i++) {
-                    if (whoseTurn.get(i).equals(myIdSocialMedia) && whoseTurnFriendIdSocialMedia.get(i).equals(myIdSocialMedia) && gameProper.get(i)) {
+                    if (whoseTurn.get(i).equals(friendIdSocialMedia) && whoseTurnFriendIdSocialMedia.get(i).equals(myIdSocialMedia) && gameProper.get(i)) {
+                        //TODO: Sprawdzić tego ifa. Czy ma być friendId czy myId.
                         orFirstGame = false;
                         orYourTurn = true;
 
@@ -236,8 +245,13 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL", answerThreePL);
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL", answerFourPL);
 
+                        intent.putExtra("KEY_MY_REPLIES", myReplies);
                         intent.putExtra("KEY_FRIEND_REPLIES", friendReplies);
                         intent.putExtra("KEY_SELECTED_QUESTIONS", selectedQuestions);
+
+                        intent.putExtra("KEY_MY_MARKED_ANSWER", myMarkedAnswer);
+                        intent.putExtra("KEY_MY_FRIEND_MARKED_ANSWER", myFriendMarkedAnswer);
+                        intent.putExtra("KEY_FRIEND_MARKED_ANSWER", friendMarkedAnswer);
                         MainActivity.this.startActivity(intent); //TODO: Sprawdzić czy nie trzeba wywołać finish(); - wyciek danych?
                         //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
                     }
@@ -260,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_THREE_PL", answerThreePL);
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_ANSWER_FOUR_PL", answerFourPL);
 
-                        intent.putExtra("KEY_FRIEND_REPLIES", friendReplies);
+                        intent.putExtra("KEY_MY_FRIEND_REPLIES", myFriendReplies);
                         MainActivity.this.startActivity(intent); //TODO: Sprawdzić czy nie trzeba wywołać finish(); - wyciek danych?
                         //TODO: Sprawdzanie czy drugi użytkownik nie rozpączął gry (pierwsza gra).
                     }
@@ -539,17 +553,108 @@ public class MainActivity extends AppCompatActivity {
                     List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
 
                     for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
-                        friendReplies.add(currentQuestionsAPIs.getId());
-                        friendReplies.add(currentQuestionsAPIs.getMyIdSocialMedia());
-                        friendReplies.add(currentQuestionsAPIs.getFriendIdSocialMedia());
-                        friendReplies.add(currentQuestionsAPIs.getMyIdQuestionOne().toString());
-                        friendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerOne().toString());
-                        friendReplies.add(currentQuestionsAPIs.getMyIdQuestionTwo().toString());
-                        friendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerTwo().toString());
-                        friendReplies.add(currentQuestionsAPIs.getMyIdQuestionThree().toString());
-                        friendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerThree().toString());
+                        myFriendReplies.add(currentQuestionsAPIs.getId());
+                        myFriendReplies.add(currentQuestionsAPIs.getMyIdSocialMedia());
+                        myFriendReplies.add(currentQuestionsAPIs.getFriendIdSocialMedia());
+                        myFriendReplies.add(currentQuestionsAPIs.getMyIdQuestionOne().toString());
+                        myFriendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerOne().toString());
+                        myFriendReplies.add(currentQuestionsAPIs.getMyIdQuestionTwo().toString());
+                        myFriendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerTwo().toString());
+                        myFriendReplies.add(currentQuestionsAPIs.getMyIdQuestionThree().toString());
+                        myFriendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerThree().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CurrentQuestionsAPI>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getMyAndFriendCurrentQuestion() { //TODO: Zabezpieczyć gdy kolekcja jest pusta.
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
+
+        Call<List<CurrentQuestionsAPI>> call = jsonKnowMoreAPI.getCurrentQuestion();
+        call.enqueue(new Callback<List<CurrentQuestionsAPI>>() {
+            @Override
+            public void onResponse(Call<List<CurrentQuestionsAPI>> call, Response<List<CurrentQuestionsAPI>> response) {
+                if (response.code() > 399) {
+                    finish();
+                } else {
+                    List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
+
+                    for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
+                        if (currentQuestionsAPIs.getMyIdQuestionOne() != null) {
+                            myReplies.add(currentQuestionsAPIs.getId());
+                            myReplies.add(currentQuestionsAPIs.getMyIdSocialMedia());
+                            myReplies.add(currentQuestionsAPIs.getFriendIdSocialMedia());
+                            myReplies.add(currentQuestionsAPIs.getMyIdQuestionOne().toString());
+                            myReplies.add(currentQuestionsAPIs.getMyMarkedAnswerOne().toString());
+                            myReplies.add(currentQuestionsAPIs.getMyIdQuestionTwo().toString());
+                            myReplies.add(currentQuestionsAPIs.getMyMarkedAnswerTwo().toString());
+                            myReplies.add(currentQuestionsAPIs.getMyIdQuestionThree().toString());
+                            myReplies.add(currentQuestionsAPIs.getMyMarkedAnswerThree().toString());
+                        }
+                        if (currentQuestionsAPIs.getFriendIdQuestionOne() != null) {
+                            friendReplies.add(currentQuestionsAPIs.getId());
+                            friendReplies.add(currentQuestionsAPIs.getMyIdSocialMedia());
+                            friendReplies.add(currentQuestionsAPIs.getFriendIdSocialMedia());
+                            friendReplies.add(currentQuestionsAPIs.getFriendIdQuestionOne().toString());
+                            friendReplies.add(currentQuestionsAPIs.getFriendMarkedAnswerOne().toString());
+                            friendReplies.add(currentQuestionsAPIs.getFriendIdQuestionTwo().toString());
+                            friendReplies.add(currentQuestionsAPIs.getFriendMarkedAnswerTwo().toString());
+                            friendReplies.add(currentQuestionsAPIs.getFriendIdQuestionThree().toString());
+                            friendReplies.add(currentQuestionsAPIs.getFriendMarkedAnswerThree().toString());
+                        }
 
                         selectedQuestions.add(currentQuestionsAPIs.getSelectedQuestions());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CurrentQuestionsAPI>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getMarkedAnswer() { //TODO: Zabezpieczyć gdy kolekcja jest pusta.
+        JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
+
+        Call<List<CurrentQuestionsAPI>> call = jsonKnowMoreAPI.getCurrentQuestion();
+        call.enqueue(new Callback<List<CurrentQuestionsAPI>>() {
+            @Override
+            public void onResponse(Call<List<CurrentQuestionsAPI>> call, Response<List<CurrentQuestionsAPI>> response) {
+                if (response.code() > 399) {
+                    finish();
+                } else {
+                    List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
+
+                    for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
+                        if (currentQuestionsAPIs.getMyMarkedAnswerOne() != null) {
+                            myMarkedAnswer.add(currentQuestionsAPIs.getMyIdSocialMedia());
+                            myMarkedAnswer.add(currentQuestionsAPIs.getFriendIdSocialMedia());
+                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerOne().toString());
+                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerTwo().toString());
+                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerThree().toString());
+                        }
+                        if (currentQuestionsAPIs.getMyFriendMarkedAnswerOne() != null) {
+                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getMyIdSocialMedia());
+                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getFriendIdSocialMedia());
+                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getMyFriendMarkedAnswerOne().toString());
+                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getMyFriendMarkedAnswerTwo().toString());
+                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getMyFriendMarkedAnswerThree().toString());
+                        }
+                        if (currentQuestionsAPIs.getFriendMarkedAnswerOne() != null) {
+                            friendMarkedAnswer.add(currentQuestionsAPIs.getMyIdSocialMedia());
+                            friendMarkedAnswer.add(currentQuestionsAPIs.getFriendIdSocialMedia());
+                            friendMarkedAnswer.add(currentQuestionsAPIs.getFriendMarkedAnswerOne().toString());
+                            friendMarkedAnswer.add(currentQuestionsAPIs.getFriendMarkedAnswerTwo().toString());
+                            friendMarkedAnswer.add(currentQuestionsAPIs.getFriendMarkedAnswerThree().toString());
+                        }
                     }
                 }
             }
