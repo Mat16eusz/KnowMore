@@ -7,6 +7,7 @@ public class CurrentQuestionsAPI {
     private String _id;
     private String myIdSocialMedia;
     private String friendIdSocialMedia;
+    private String initializationGame;
     private String whoseTurn;
     private boolean gameProper;
     private ArrayList<String> selectedQuestions = new ArrayList<>();
@@ -50,7 +51,7 @@ public class CurrentQuestionsAPI {
     private ArrayList<String> friendAnswerThreePL = new ArrayList<>();
     private Integer friendMarkedAnswerThree;
 
-    //All
+    //All - initializationGame
     public CurrentQuestionsAPI(String myIdSocialMedia, String friendIdSocialMedia, String whoseTurn, boolean gameProper, ArrayList<String> selectedQuestions, Integer myIdQuestionOne, String myQuestionOneEN, ArrayList<String> myAnswerOneEN, String myQuestionOnePL, ArrayList<String> myAnswerOnePL, Integer myMarkedAnswerOne, Integer myFriendMarkedAnswerOne, Integer myIdQuestionTwo, String myQuestionTwoEN, ArrayList<String> myAnswerTwoEN, String myQuestionTwoPL, ArrayList<String> myAnswerTwoPL, Integer myMarkedAnswerTwo, Integer myFriendMarkedAnswerTwo, Integer myIdQuestionThree, String myQuestionThreeEN, ArrayList<String> myAnswerThreeEN, String myQuestionThreePL, ArrayList<String> myAnswerThreePL, Integer myMarkedAnswerThree, Integer myFriendMarkedAnswerThree, Integer friendIdQuestionOne, String friendQuestionOneEN, ArrayList<String> friendAnswerOneEN, String friendQuestionOnePL, ArrayList<String> friendAnswerOnePL, Integer friendMarkedAnswerOne, Integer friendIdQuestionTwo, String friendQuestionTwoEN, ArrayList<String> friendAnswerTwoEN, String friendQuestionTwoPL, ArrayList<String> friendAnswerTwoPL, Integer friendMarkedAnswerTwo, Integer friendIdQuestionThree, String friendQuestionThreeEN, ArrayList<String> friendAnswerThreeEN, String friendQuestionThreePL, ArrayList<String> friendAnswerThreePL, Integer friendMarkedAnswerThree) {
         this.myIdSocialMedia = myIdSocialMedia;
         this.friendIdSocialMedia = friendIdSocialMedia;
@@ -99,9 +100,10 @@ public class CurrentQuestionsAPI {
     }
 
     //First post
-    public CurrentQuestionsAPI(String myIdSocialMedia, String friendIdSocialMedia, String whoseTurn, boolean gameProper, ArrayList<String> selectedQuestions, Integer myIdQuestionOne, String myQuestionOneEN, ArrayList<String> myAnswerOneEN, String myQuestionOnePL, ArrayList<String> myAnswerOnePL, Integer myMarkedAnswerOne, Integer myIdQuestionTwo, String myQuestionTwoEN, ArrayList<String> myAnswerTwoEN, String myQuestionTwoPL, ArrayList<String> myAnswerTwoPL, Integer myMarkedAnswerTwo, Integer myIdQuestionThree, String myQuestionThreeEN, ArrayList<String> myAnswerThreeEN, String myQuestionThreePL, ArrayList<String> myAnswerThreePL, Integer myMarkedAnswerThree) {
+    public CurrentQuestionsAPI(String myIdSocialMedia, String friendIdSocialMedia, String initializationGame, String whoseTurn, boolean gameProper, ArrayList<String> selectedQuestions, Integer myIdQuestionOne, String myQuestionOneEN, ArrayList<String> myAnswerOneEN, String myQuestionOnePL, ArrayList<String> myAnswerOnePL, Integer myMarkedAnswerOne, Integer myIdQuestionTwo, String myQuestionTwoEN, ArrayList<String> myAnswerTwoEN, String myQuestionTwoPL, ArrayList<String> myAnswerTwoPL, Integer myMarkedAnswerTwo, Integer myIdQuestionThree, String myQuestionThreeEN, ArrayList<String> myAnswerThreeEN, String myQuestionThreePL, ArrayList<String> myAnswerThreePL, Integer myMarkedAnswerThree) {
         this.myIdSocialMedia = myIdSocialMedia;
         this.friendIdSocialMedia = friendIdSocialMedia;
+        this.initializationGame = initializationGame;
         this.whoseTurn = whoseTurn;
         this.gameProper = gameProper;
         this.selectedQuestions = selectedQuestions;
@@ -209,6 +211,10 @@ public class CurrentQuestionsAPI {
 
     public String getFriendIdSocialMedia() {
         return friendIdSocialMedia;
+    }
+
+    public String getInitializationGame() {
+        return initializationGame;
     }
 
     public String getWhoseTurn() {

@@ -185,14 +185,14 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<PlayersDataAPI> playersDataAPI = response.body();
+                    List<PlayersDataAPI> playersDataAPIs = response.body();
 
-                    for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
-                        players.add(playersDataAPIs.getName() + "#" + playersDataAPIs.getIdSocialMedia() + "#" + playersDataAPIs.getPersonPhoto() + "#" + playersDataAPIs.getToken());
+                    for (PlayersDataAPI playersDataAPI : playersDataAPIs) {
+                        players.add(playersDataAPI.getName() + "#" + playersDataAPI.getIdSocialMedia() + "#" + playersDataAPI.getPersonPhoto() + "#" + playersDataAPI.getToken());
 
-                        if (myIdSocialMedia.equals(playersDataAPIs.getIdSocialMedia())) {
-                            myName = playersDataAPIs.getName();
-                            myAvatar = playersDataAPIs.getPersonPhoto();
+                        if (myIdSocialMedia.equals(playersDataAPI.getIdSocialMedia())) {
+                            myName = playersDataAPI.getName();
+                            myAvatar = playersDataAPI.getPersonPhoto();
                         }
                     }
                 }
@@ -420,12 +420,12 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<PlayerInvitationAPI> playerInvitationAPI = response.body();
+                    List<PlayerInvitationAPI> playerInvitationAPIs = response.body();
 
-                    for (PlayerInvitationAPI playerInvitationAPIs : playerInvitationAPI) {
-                        if (myIdSocialMedia.equals(playerInvitationAPIs.getMyIdSocialMedia())) {
-                            insertItem(playerInvitationAPIs.getIdSocialMedia(), playerInvitationAPIs.getName(), playerInvitationAPIs.getPersonPhoto());
-                            deletePlayerInvite(playerInvitationAPIs.getId());
+                    for (PlayerInvitationAPI playerInvitationAPI : playerInvitationAPIs) {
+                        if (myIdSocialMedia.equals(playerInvitationAPI.getMyIdSocialMedia())) {
+                            insertItem(playerInvitationAPI.getIdSocialMedia(), playerInvitationAPI.getName(), playerInvitationAPI.getPersonPhoto());
+                            deletePlayerInvite(playerInvitationAPI.getId());
                         }
                     }
                 }
@@ -488,20 +488,20 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<QuestionsAPI> questionsAPI = response.body();
+                    List<QuestionsAPI> questionsAPIs = response.body();
 
-                    for (QuestionsAPI questionsAPIs : questionsAPI) {
-                        idQuestions.add(questionsAPIs.getIdQuestions());
-                        questionsEN.add(questionsAPIs.getQuestionsEN());
-                        answerOneEN.add(questionsAPIs.getAnswerOneEN());
-                        answerTwoEN.add(questionsAPIs.getAnswerTwoEN());
-                        answerThreeEN.add(questionsAPIs.getAnswerThreeEN());
-                        answerFourEN.add(questionsAPIs.getAnswerFourEN());
-                        questionsPL.add(questionsAPIs.getQuestionsPL());
-                        answerOnePL.add(questionsAPIs.getAnswerOnePL());
-                        answerTwoPL.add(questionsAPIs.getAnswerTwoPL());
-                        answerThreePL.add(questionsAPIs.getAnswerThreePL());
-                        answerFourPL.add(questionsAPIs.getAnswerFourPL());
+                    for (QuestionsAPI questionsAPI : questionsAPIs) {
+                        idQuestions.add(questionsAPI.getIdQuestions());
+                        questionsEN.add(questionsAPI.getQuestionsEN());
+                        answerOneEN.add(questionsAPI.getAnswerOneEN());
+                        answerTwoEN.add(questionsAPI.getAnswerTwoEN());
+                        answerThreeEN.add(questionsAPI.getAnswerThreeEN());
+                        answerFourEN.add(questionsAPI.getAnswerFourEN());
+                        questionsPL.add(questionsAPI.getQuestionsPL());
+                        answerOnePL.add(questionsAPI.getAnswerOnePL());
+                        answerTwoPL.add(questionsAPI.getAnswerTwoPL());
+                        answerThreePL.add(questionsAPI.getAnswerThreePL());
+                        answerFourPL.add(questionsAPI.getAnswerFourPL());
                     }
                 }
             }
@@ -523,12 +523,12 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
+                    List<CurrentQuestionsAPI> currentQuestionsAPIs = response.body();
 
-                    for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
-                        whoseTurn.add(currentQuestionsAPIs.getFriendIdSocialMedia());
-                        whoseTurnFriendIdSocialMedia.add(currentQuestionsAPIs.getWhoseTurn());
-                        gameProper.add(currentQuestionsAPIs.getGameProper());
+                    for (CurrentQuestionsAPI currentQuestionsAPI : currentQuestionsAPIs) {
+                        whoseTurn.add(currentQuestionsAPI.getFriendIdSocialMedia());
+                        whoseTurnFriendIdSocialMedia.add(currentQuestionsAPI.getWhoseTurn());
+                        gameProper.add(currentQuestionsAPI.getGameProper());
                     }
                 }
             }
@@ -550,18 +550,18 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
+                    List<CurrentQuestionsAPI> currentQuestionsAPIs = response.body();
 
-                    for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
-                        myFriendReplies.add(currentQuestionsAPIs.getId());
-                        myFriendReplies.add(currentQuestionsAPIs.getMyIdSocialMedia());
-                        myFriendReplies.add(currentQuestionsAPIs.getFriendIdSocialMedia());
-                        myFriendReplies.add(currentQuestionsAPIs.getMyIdQuestionOne().toString());
-                        myFriendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerOne().toString());
-                        myFriendReplies.add(currentQuestionsAPIs.getMyIdQuestionTwo().toString());
-                        myFriendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerTwo().toString());
-                        myFriendReplies.add(currentQuestionsAPIs.getMyIdQuestionThree().toString());
-                        myFriendReplies.add(currentQuestionsAPIs.getMyMarkedAnswerThree().toString());
+                    for (CurrentQuestionsAPI currentQuestionsAPI : currentQuestionsAPIs) {
+                        myFriendReplies.add(currentQuestionsAPI.getId());
+                        myFriendReplies.add(currentQuestionsAPI.getMyIdSocialMedia());
+                        myFriendReplies.add(currentQuestionsAPI.getFriendIdSocialMedia());
+                        myFriendReplies.add(currentQuestionsAPI.getMyIdQuestionOne().toString());
+                        myFriendReplies.add(currentQuestionsAPI.getMyMarkedAnswerOne().toString());
+                        myFriendReplies.add(currentQuestionsAPI.getMyIdQuestionTwo().toString());
+                        myFriendReplies.add(currentQuestionsAPI.getMyMarkedAnswerTwo().toString());
+                        myFriendReplies.add(currentQuestionsAPI.getMyIdQuestionThree().toString());
+                        myFriendReplies.add(currentQuestionsAPI.getMyMarkedAnswerThree().toString());
                     }
                 }
             }
@@ -583,33 +583,33 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
+                    List<CurrentQuestionsAPI> currentQuestionsAPIs = response.body();
 
-                    for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
-                        if (currentQuestionsAPIs.getMyIdQuestionOne() != null) {
-                            myReplies.add(currentQuestionsAPIs.getId());
-                            myReplies.add(currentQuestionsAPIs.getMyIdSocialMedia());
-                            myReplies.add(currentQuestionsAPIs.getFriendIdSocialMedia());
-                            myReplies.add(currentQuestionsAPIs.getMyIdQuestionOne().toString());
-                            myReplies.add(currentQuestionsAPIs.getMyMarkedAnswerOne().toString());
-                            myReplies.add(currentQuestionsAPIs.getMyIdQuestionTwo().toString());
-                            myReplies.add(currentQuestionsAPIs.getMyMarkedAnswerTwo().toString());
-                            myReplies.add(currentQuestionsAPIs.getMyIdQuestionThree().toString());
-                            myReplies.add(currentQuestionsAPIs.getMyMarkedAnswerThree().toString());
+                    for (CurrentQuestionsAPI currentQuestionsAPI : currentQuestionsAPIs) {
+                        if (currentQuestionsAPI.getMyIdQuestionOne() != null) {
+                            myReplies.add(currentQuestionsAPI.getId());
+                            myReplies.add(currentQuestionsAPI.getMyIdSocialMedia());
+                            myReplies.add(currentQuestionsAPI.getFriendIdSocialMedia());
+                            myReplies.add(currentQuestionsAPI.getMyIdQuestionOne().toString());
+                            myReplies.add(currentQuestionsAPI.getMyMarkedAnswerOne().toString());
+                            myReplies.add(currentQuestionsAPI.getMyIdQuestionTwo().toString());
+                            myReplies.add(currentQuestionsAPI.getMyMarkedAnswerTwo().toString());
+                            myReplies.add(currentQuestionsAPI.getMyIdQuestionThree().toString());
+                            myReplies.add(currentQuestionsAPI.getMyMarkedAnswerThree().toString());
                         }
-                        if (currentQuestionsAPIs.getFriendIdQuestionOne() != null) {
-                            friendReplies.add(currentQuestionsAPIs.getId());
-                            friendReplies.add(currentQuestionsAPIs.getMyIdSocialMedia());
-                            friendReplies.add(currentQuestionsAPIs.getFriendIdSocialMedia());
-                            friendReplies.add(currentQuestionsAPIs.getFriendIdQuestionOne().toString());
-                            friendReplies.add(currentQuestionsAPIs.getFriendMarkedAnswerOne().toString());
-                            friendReplies.add(currentQuestionsAPIs.getFriendIdQuestionTwo().toString());
-                            friendReplies.add(currentQuestionsAPIs.getFriendMarkedAnswerTwo().toString());
-                            friendReplies.add(currentQuestionsAPIs.getFriendIdQuestionThree().toString());
-                            friendReplies.add(currentQuestionsAPIs.getFriendMarkedAnswerThree().toString());
+                        if (currentQuestionsAPI.getFriendIdQuestionOne() != null) {
+                            friendReplies.add(currentQuestionsAPI.getId());
+                            friendReplies.add(currentQuestionsAPI.getMyIdSocialMedia());
+                            friendReplies.add(currentQuestionsAPI.getFriendIdSocialMedia());
+                            friendReplies.add(currentQuestionsAPI.getFriendIdQuestionOne().toString());
+                            friendReplies.add(currentQuestionsAPI.getFriendMarkedAnswerOne().toString());
+                            friendReplies.add(currentQuestionsAPI.getFriendIdQuestionTwo().toString());
+                            friendReplies.add(currentQuestionsAPI.getFriendMarkedAnswerTwo().toString());
+                            friendReplies.add(currentQuestionsAPI.getFriendIdQuestionThree().toString());
+                            friendReplies.add(currentQuestionsAPI.getFriendMarkedAnswerThree().toString());
                         }
 
-                        selectedQuestions.add(currentQuestionsAPIs.getSelectedQuestions());
+                        selectedQuestions.add(currentQuestionsAPI.getSelectedQuestions());
                     }
                 }
             }
@@ -631,29 +631,29 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
+                    List<CurrentQuestionsAPI> currentQuestionsAPIs = response.body();
 
-                    for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
-                        if (currentQuestionsAPIs.getMyMarkedAnswerOne() != null) {
-                            myMarkedAnswer.add(currentQuestionsAPIs.getMyIdSocialMedia());
-                            myMarkedAnswer.add(currentQuestionsAPIs.getFriendIdSocialMedia());
-                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerOne().toString());
-                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerTwo().toString());
-                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerThree().toString());
+                    for (CurrentQuestionsAPI currentQuestionsAPI : currentQuestionsAPIs) {
+                        if (currentQuestionsAPI.getMyMarkedAnswerOne() != null) {
+                            myMarkedAnswer.add(currentQuestionsAPI.getMyIdSocialMedia());
+                            myMarkedAnswer.add(currentQuestionsAPI.getFriendIdSocialMedia());
+                            myMarkedAnswer.add(currentQuestionsAPI.getMyMarkedAnswerOne().toString());
+                            myMarkedAnswer.add(currentQuestionsAPI.getMyMarkedAnswerTwo().toString());
+                            myMarkedAnswer.add(currentQuestionsAPI.getMyMarkedAnswerThree().toString());
                         }
-                        if (currentQuestionsAPIs.getMyFriendMarkedAnswerOne() != null) {
-                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getMyIdSocialMedia());
-                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getFriendIdSocialMedia());
-                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getMyFriendMarkedAnswerOne().toString());
-                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getMyFriendMarkedAnswerTwo().toString());
-                            myFriendMarkedAnswer.add(currentQuestionsAPIs.getMyFriendMarkedAnswerThree().toString());
+                        if (currentQuestionsAPI.getMyFriendMarkedAnswerOne() != null) {
+                            myFriendMarkedAnswer.add(currentQuestionsAPI.getMyIdSocialMedia());
+                            myFriendMarkedAnswer.add(currentQuestionsAPI.getFriendIdSocialMedia());
+                            myFriendMarkedAnswer.add(currentQuestionsAPI.getMyFriendMarkedAnswerOne().toString());
+                            myFriendMarkedAnswer.add(currentQuestionsAPI.getMyFriendMarkedAnswerTwo().toString());
+                            myFriendMarkedAnswer.add(currentQuestionsAPI.getMyFriendMarkedAnswerThree().toString());
                         }
-                        if (currentQuestionsAPIs.getFriendMarkedAnswerOne() != null) {
-                            friendMarkedAnswer.add(currentQuestionsAPIs.getMyIdSocialMedia());
-                            friendMarkedAnswer.add(currentQuestionsAPIs.getFriendIdSocialMedia());
-                            friendMarkedAnswer.add(currentQuestionsAPIs.getFriendMarkedAnswerOne().toString());
-                            friendMarkedAnswer.add(currentQuestionsAPIs.getFriendMarkedAnswerTwo().toString());
-                            friendMarkedAnswer.add(currentQuestionsAPIs.getFriendMarkedAnswerThree().toString());
+                        if (currentQuestionsAPI.getFriendMarkedAnswerOne() != null) {
+                            friendMarkedAnswer.add(currentQuestionsAPI.getMyIdSocialMedia());
+                            friendMarkedAnswer.add(currentQuestionsAPI.getFriendIdSocialMedia());
+                            friendMarkedAnswer.add(currentQuestionsAPI.getFriendMarkedAnswerOne().toString());
+                            friendMarkedAnswer.add(currentQuestionsAPI.getFriendMarkedAnswerTwo().toString());
+                            friendMarkedAnswer.add(currentQuestionsAPI.getFriendMarkedAnswerThree().toString());
                         }
                     }
                 }

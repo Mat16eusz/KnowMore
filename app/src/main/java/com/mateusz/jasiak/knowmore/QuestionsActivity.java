@@ -64,17 +64,27 @@ public class QuestionsActivity extends AppCompatActivity {
     private ArrayList<String> friendReplies = new ArrayList<>();
     private ArrayList<String> localFriendReplies = new ArrayList<>();
 
-    /*ArrayList<String> myAnswerOneEN = new ArrayList<>();
+    ArrayList<String> myAnswerOneEN = new ArrayList<>();
     ArrayList<String> myAnswerTwoEN = new ArrayList<>();
     ArrayList<String> myAnswerThreeEN = new ArrayList<>();
     ArrayList<String> myAnswerOnePL = new ArrayList<>();
     ArrayList<String> myAnswerTwoPL = new ArrayList<>();
-    ArrayList<String> myAnswerThreePL = new ArrayList<>();*/
+    ArrayList<String> myAnswerThreePL = new ArrayList<>();
+
+    List<Integer> copyIdQuestions;
+    List<String> copyQuestionsEN;
+    List<String> copyAnswerOneEN;
+    List<String> copyAnswerTwoEN;
+    List<String> copyAnswerThreeEN;
+    List<String> copyAnswerFourEN;
+    List<String> copyQuestionsPL;
+    List<String> copyAnswerOnePL;
+    List<String> copyAnswerTwoPL;
+    List<String> copyAnswerThreePL;
+    List<String> copyAnswerFourPL;
 
     private String idCurrentQuestion;
-    //private ArrayList<ArrayList<String>> selectedQuestions = new ArrayList<>();
     private ArrayList<String> selectedQuestions = new ArrayList<>();
-    private int positionI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +109,6 @@ public class QuestionsActivity extends AppCompatActivity {
         myReplies = intent.getStringArrayListExtra("KEY_MY_REPLIES");
         myFriendReplies = intent.getStringArrayListExtra("KEY_MY_FRIEND_REPLIES");
         friendReplies = intent.getStringArrayListExtra("KEY_FRIEND_REPLIES");
-        //selectedQuestions = (ArrayList<ArrayList<String>>) intent.getSerializableExtra("KEY_SELECTED_QUESTIONS");
 
         myMarkedAnswer = intent.getStringArrayListExtra("KEY_MY_MARKED_ANSWER");
         myFriendMarkedAnswer = intent.getStringArrayListExtra("KEY_MY_FRIEND_MARKED_ANSWER");
@@ -117,9 +126,6 @@ public class QuestionsActivity extends AppCompatActivity {
         answerButton4.setClickable(false);
 
         getSelectedQuestions();
-
-        /*positions.add(myIdSocialMedia);
-        positions.add(friendIdSocialMedia);*/
 
         for (int i = 0; i < myReplies.size(); i++) {
             if ((myReplies.get(i + 1).equals(myIdSocialMedia) && myReplies.get(i + 2).equals(friendIdSocialMedia)) || (myReplies.get(i + 1).equals(friendIdSocialMedia) && myReplies.get(i + 2).equals(myIdSocialMedia))) {
@@ -217,7 +223,7 @@ public class QuestionsActivity extends AppCompatActivity {
             }
         }, delayMillis);
 
-        /*myAnswerOneEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(0))));
+        myAnswerOneEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(0))));
         myAnswerOneEN.add(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(0))));
         myAnswerOneEN.add(answerThreeEN.get(Integer.parseInt(localFriendReplies.get(0))));
         myAnswerOneEN.add(answerFourEN.get(Integer.parseInt(localFriendReplies.get(0))));
@@ -241,7 +247,19 @@ public class QuestionsActivity extends AppCompatActivity {
         myAnswerThreePL.add(answerOnePL.get(Integer.parseInt(localFriendReplies.get(4))));
         myAnswerThreePL.add(answerTwoPL.get(Integer.parseInt(localFriendReplies.get(4))));
         myAnswerThreePL.add(answerThreePL.get(Integer.parseInt(localFriendReplies.get(4))));
-        myAnswerThreePL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(4))));*/
+        myAnswerThreePL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(4))));
+
+        copyIdQuestions = new ArrayList<>(idQuestions);
+        copyQuestionsEN = new ArrayList<>(questionsEN);
+        copyAnswerOneEN = new ArrayList<>(answerOneEN);
+        copyAnswerTwoEN = new ArrayList<>(answerTwoEN);
+        copyAnswerThreeEN = new ArrayList<>(answerThreeEN);
+        copyAnswerFourEN = new ArrayList<>(answerFourEN);
+        copyQuestionsPL = new ArrayList<>(questionsPL);
+        copyAnswerOnePL = new ArrayList<>(answerOnePL);
+        copyAnswerTwoPL = new ArrayList<>(answerTwoPL);
+        copyAnswerThreePL = new ArrayList<>(answerThreePL);
+        copyAnswerFourPL = new ArrayList<>(answerFourPL);
     }
 
     public void answerButton1(View view) {
@@ -364,7 +382,7 @@ public class QuestionsActivity extends AppCompatActivity {
                     getQuestion();
                 } else {
                     localFriendMarkedAnswer.add(markedAnswer);
-                    //updateCurrentQuestion();
+                    updateCurrentQuestion();
                     Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
                     QuestionsActivity.this.startActivity(intent);
                 }
@@ -440,6 +458,9 @@ public class QuestionsActivity extends AppCompatActivity {
                         answerTwoEN.remove(j);
                         answerThreeEN.remove(j);
                         answerFourEN.remove(j);
+                        if (j > 0) {
+                            j--; //TODO: Sprawdzić czy jest dobrze ta linijka.
+                        }
                     }
                 }
             }
@@ -459,20 +480,9 @@ public class QuestionsActivity extends AppCompatActivity {
             answerButton3.setText(answerThreeEN.get(position));
             answerButton4.setText(answerFourEN.get(position));
         }
-        positions.add(position.toString());
-        selectedQuestions.add(position.toString());
 
-        idQuestions.remove(position);
-        questionsPL.remove(position);
-        answerOnePL.remove(position);
-        answerTwoPL.remove(position);
-        answerThreePL.remove(position);
-        answerFourPL.remove(position);
-        questionsEN.remove(position);
-        answerOneEN.remove(position);
-        answerTwoEN.remove(position);
-        answerThreeEN.remove(position);
-        answerFourEN.remove(position);
+        positions.add(idQuestions.get(position).toString());
+        selectedQuestions.add(idQuestions.get(position).toString());
     }
 
     private void showQuestion(int currentQuestion, ArrayList<String> replies) {
@@ -520,42 +530,41 @@ public class QuestionsActivity extends AppCompatActivity {
         });
     }
 
-    /*private void updateCurrentQuestion() {
+    private void updateCurrentQuestion() {
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         ArrayList<String> friendAnswerOneEN = new ArrayList<>();
-        friendAnswerOneEN.add(answerOneEN.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOneEN.add(answerTwoEN.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOneEN.add(answerThreeEN.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOneEN.add(answerFourEN.get(Integer.parseInt(positions.get(0))));
+        friendAnswerOneEN.add(copyAnswerOneEN.get(Integer.parseInt(positions.get(0))));
+        friendAnswerOneEN.add(copyAnswerTwoEN.get(Integer.parseInt(positions.get(0))));
+        friendAnswerOneEN.add(copyAnswerThreeEN.get(Integer.parseInt(positions.get(0))));
+        friendAnswerOneEN.add(copyAnswerFourEN.get(Integer.parseInt(positions.get(0))));
         ArrayList<String> friendAnswerOnePL = new ArrayList<>();
-        friendAnswerOnePL.add(answerOnePL.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOnePL.add(answerTwoPL.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOnePL.add(answerThreePL.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOnePL.add(answerFourPL.get(Integer.parseInt(positions.get(0))));
+        friendAnswerOnePL.add(copyAnswerOnePL.get(Integer.parseInt(positions.get(0))));
+        friendAnswerOnePL.add(copyAnswerTwoPL.get(Integer.parseInt(positions.get(0))));
+        friendAnswerOnePL.add(copyAnswerThreePL.get(Integer.parseInt(positions.get(0))));
+        friendAnswerOnePL.add(copyAnswerFourPL.get(Integer.parseInt(positions.get(0))));
         ArrayList<String> friendAnswerTwoEN = new ArrayList<>();
-        friendAnswerTwoEN.add(answerOneEN.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoEN.add(answerTwoEN.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoEN.add(answerThreeEN.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoEN.add(answerFourEN.get(Integer.parseInt(positions.get(1))));
+        friendAnswerTwoEN.add(copyAnswerOneEN.get(Integer.parseInt(positions.get(1))));
+        friendAnswerTwoEN.add(copyAnswerTwoEN.get(Integer.parseInt(positions.get(1))));
+        friendAnswerTwoEN.add(copyAnswerThreeEN.get(Integer.parseInt(positions.get(1))));
+        friendAnswerTwoEN.add(copyAnswerFourEN.get(Integer.parseInt(positions.get(1))));
         ArrayList<String> friendAnswerTwoPL = new ArrayList<>();
-        friendAnswerTwoPL.add(answerOnePL.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoPL.add(answerTwoPL.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoPL.add(answerThreePL.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoPL.add(answerFourPL.get(Integer.parseInt(positions.get(1))));
+        friendAnswerTwoPL.add(copyAnswerOnePL.get(Integer.parseInt(positions.get(1))));
+        friendAnswerTwoPL.add(copyAnswerTwoPL.get(Integer.parseInt(positions.get(1))));
+        friendAnswerTwoPL.add(copyAnswerThreePL.get(Integer.parseInt(positions.get(1))));
+        friendAnswerTwoPL.add(copyAnswerFourPL.get(Integer.parseInt(positions.get(1))));
         ArrayList<String> friendAnswerThreeEN = new ArrayList<>();
-        friendAnswerThreeEN.add(answerOneEN.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreeEN.add(answerTwoEN.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreeEN.add(answerThreeEN.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreeEN.add(answerFourEN.get(Integer.parseInt(positions.get(2))));
+        friendAnswerThreeEN.add(copyAnswerOneEN.get(Integer.parseInt(positions.get(2))));
+        friendAnswerThreeEN.add(copyAnswerTwoEN.get(Integer.parseInt(positions.get(2))));
+        friendAnswerThreeEN.add(copyAnswerThreeEN.get(Integer.parseInt(positions.get(2))));
+        friendAnswerThreeEN.add(copyAnswerFourEN.get(Integer.parseInt(positions.get(2))));
         ArrayList<String> friendAnswerThreePL = new ArrayList<>();
-        friendAnswerThreePL.add(answerOnePL.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreePL.add(answerTwoPL.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreePL.add(answerThreePL.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreePL.add(answerFourPL.get(Integer.parseInt(positions.get(2))));
+        friendAnswerThreePL.add(copyAnswerOnePL.get(Integer.parseInt(positions.get(2))));
+        friendAnswerThreePL.add(copyAnswerTwoPL.get(Integer.parseInt(positions.get(2))));
+        friendAnswerThreePL.add(copyAnswerThreePL.get(Integer.parseInt(positions.get(2))));
+        friendAnswerThreePL.add(copyAnswerFourPL.get(Integer.parseInt(positions.get(2))));
 
-        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, myIdSocialMedia, friendIdSocialMedia, true, selectedQuestions, *//*M1*//* Integer.parseInt(localFriendReplies.get(0)), questionsEN.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOneEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOnePL, intentMyMarkedAnswer.get(0), intentMyFriendMarkedAnswer.get(0), *//*M2*//* Integer.parseInt(localFriendReplies.get(1)), questionsEN.get(Integer.parseInt(localFriendReplies.get(1))), myAnswerTwoEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(1))), myAnswerTwoPL, intentMyMarkedAnswer.get(1), intentMyFriendMarkedAnswer.get(1), *//*M3*//* Integer.parseInt(localFriendReplies.get(3)), questionsEN.get(Integer.parseInt(localFriendReplies.get(3))), myAnswerThreeEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(3))), myAnswerThreePL, intentMyMarkedAnswer.get(2), intentMyFriendMarkedAnswer.get(2), *//*F1*//* Integer.parseInt(positions.get(0)), questionsEN.get(Integer.parseInt(positions.get(0))), friendAnswerOneEN, questionsPL.get(Integer.parseInt(positions.get(0))), friendAnswerOnePL, intentFriendMarkedAnswer.get(0), *//*F2*//* Integer.parseInt(positions.get(1)), questionsEN.get(Integer.parseInt(positions.get(1))), friendAnswerTwoEN, questionsPL.get(Integer.parseInt(positions.get(1))), friendAnswerTwoPL, intentFriendMarkedAnswer.get(1), *//*F3*//*Integer.parseInt(positions.get(2)), questionsEN.get(Integer.parseInt(positions.get(2))), friendAnswerThreeEN, questionsPL.get(Integer.parseInt(positions.get(2))), friendAnswerThreePL, intentFriendMarkedAnswer.get(2));
-        //CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, selectedQuestions, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, myIdSocialMedia, friendIdSocialMedia, true, selectedQuestions, /*M1*/ Integer.parseInt(localFriendReplies.get(0)), copyQuestionsEN.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOneEN, copyQuestionsPL.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOnePL, intentMyMarkedAnswer.get(0), intentMyFriendMarkedAnswer.get(0), /*M2*/ Integer.parseInt(localFriendReplies.get(1)), copyQuestionsEN.get(Integer.parseInt(localFriendReplies.get(1))), myAnswerTwoEN, copyQuestionsPL.get(Integer.parseInt(localFriendReplies.get(1))), myAnswerTwoPL, intentMyMarkedAnswer.get(1), intentMyFriendMarkedAnswer.get(1), /*M3*/ Integer.parseInt(localFriendReplies.get(2)), copyQuestionsEN.get(Integer.parseInt(localFriendReplies.get(2))), myAnswerThreeEN, copyQuestionsPL.get(Integer.parseInt(localFriendReplies.get(2))), myAnswerThreePL, intentMyMarkedAnswer.get(2), intentMyFriendMarkedAnswer.get(2), /*F1*/ Integer.parseInt(positions.get(0)), copyQuestionsEN.get(Integer.parseInt(positions.get(0))), friendAnswerOneEN, copyQuestionsPL.get(Integer.parseInt(positions.get(0))), friendAnswerOnePL, intentFriendMarkedAnswer.get(0), /*F2*/ Integer.parseInt(positions.get(1)), copyQuestionsEN.get(Integer.parseInt(positions.get(1))), friendAnswerTwoEN, copyQuestionsPL.get(Integer.parseInt(positions.get(1))), friendAnswerTwoPL, intentFriendMarkedAnswer.get(1), /*F3*/ Integer.parseInt(positions.get(2)), copyQuestionsEN.get(Integer.parseInt(positions.get(2))), friendAnswerThreeEN, copyQuestionsPL.get(Integer.parseInt(positions.get(2))), friendAnswerThreePL, intentFriendMarkedAnswer.get(2));
         Call<CurrentQuestionsAPI> call = jsonKnowMoreAPI.updateCurrentQuestion(idCurrentQuestion, currentQuestionsAPI);
         call.enqueue(new Callback<CurrentQuestionsAPI>() {
             @Override
@@ -568,5 +577,5 @@ public class QuestionsActivity extends AppCompatActivity {
 
             }
         });
-    }*/
+    }
 }

@@ -154,11 +154,11 @@ public class StartActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<PlayersDataAPI> playersDataAPI = response.body();
+                    List<PlayersDataAPI> playersDataAPIs = response.body();
                     int temp = 0;
 
-                    for (PlayersDataAPI playersDataAPIs : playersDataAPI) {
-                        if (playersDataAPIs.getIdSocialMedia().equals(idSocialMedia)) {
+                    for (PlayersDataAPI playersDataAPI : playersDataAPIs) {
+                        if (playersDataAPI.getIdSocialMedia().equals(idSocialMedia)) {
                             temp++;
                         }
                     }

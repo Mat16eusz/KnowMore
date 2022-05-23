@@ -340,13 +340,13 @@ public class FirstGameFriendActivity extends AppCompatActivity {
                 if (response.code() > 399) {
                     finish();
                 } else {
-                    List<CurrentQuestionsAPI> currentQuestionsAPI = response.body();
+                    List<CurrentQuestionsAPI> currentQuestionsAPIs = response.body();
 
-                    for (CurrentQuestionsAPI currentQuestionsAPIs : currentQuestionsAPI) {
-                        if ((currentQuestionsAPIs.getId().equals(idCurrentQuestion))) {
-                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerOne());
-                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerTwo());
-                            myMarkedAnswer.add(currentQuestionsAPIs.getMyMarkedAnswerThree());
+                    for (CurrentQuestionsAPI currentQuestionsAPI : currentQuestionsAPIs) {
+                        if ((currentQuestionsAPI.getId().equals(idCurrentQuestion))) {
+                            myMarkedAnswer.add(currentQuestionsAPI.getMyMarkedAnswerOne());
+                            myMarkedAnswer.add(currentQuestionsAPI.getMyMarkedAnswerTwo());
+                            myMarkedAnswer.add(currentQuestionsAPI.getMyMarkedAnswerThree());
                         }
                     }
                 }
