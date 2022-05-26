@@ -13,4 +13,7 @@
     <string name="invite_notification">Invitation to the game from</string>
     <string name="not_your_turn">Wait for your turn</string>
     <string name="player_added">has already been added</string>
+    <string name="select_answer">Mark your answer!</string>
+    <string name="guess">Guess your friend\'s answer!</string>
+    <string name="was_he_answered_correctly">A friend replied to your answer:</string>
 </resources>

@@ -14,4 +14,7 @@
     <string name="invite_notification">Zaproszenie do gry od</string>
     <string name="not_your_turn">Poczekaj na swoją turę</string>
     <string name="player_added">został już dodany</string>
+    <string name="select_answer">Zaznacz swoją odpowiedź!</string>
+    <string name="guess">Zgadnij odpowiedź przyjaciela!</string>
+    <string name="was_he_answered_correctly">Przyjaciel odpowiedział na Twoją odpowiedź:</string>
 </resources>

@@ -41,6 +41,7 @@ public class QuestionsActivity extends AppCompatActivity {
     private String myIdSocialMedia;
     private String friendIdSocialMedia;
 
+    private TextView whoseAsking;
     private TextView questionView;
     private Button answerButton1;
     private Button answerButton2;
@@ -114,6 +115,7 @@ public class QuestionsActivity extends AppCompatActivity {
         myFriendMarkedAnswer = intent.getStringArrayListExtra("KEY_MY_FRIEND_MARKED_ANSWER");
         friendMarkedAnswer = intent.getStringArrayListExtra("KEY_FRIEND_MARKED_ANSWER");
 
+        whoseAsking = findViewById(R.id.whoseAsking);
         questionView = findViewById(R.id.questionView);
         answerButton1 = findViewById(R.id.answerButton1);
         answerButton2 = findViewById(R.id.answerButton2);
@@ -215,6 +217,8 @@ public class QuestionsActivity extends AppCompatActivity {
                                 answerButton2.setClickable(true);
                                 answerButton3.setClickable(true);
                                 answerButton4.setClickable(true);
+
+                                whoseAsking.setText(R.string.guess);
                                 showQuestion(0, localFriendReplies);
                             }
                         }, delayMillis);
@@ -371,6 +375,7 @@ public class QuestionsActivity extends AppCompatActivity {
                         answerButton3.setClickable(true);
                         answerButton4.setClickable(true);
 
+                        whoseAsking.setText(R.string.select_answer);
                         getQuestion();
                         friendQuestion++;
                     }

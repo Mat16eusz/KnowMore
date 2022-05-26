@@ -34,6 +34,7 @@ public class FirstGameFriendActivity extends AppCompatActivity {
     private String myIdSocialMedia;
     private String friendIdSocialMedia;
 
+    private TextView whoseAsking;
     private TextView questionView;
     private Button answerButton1;
     private Button answerButton2;
@@ -77,6 +78,7 @@ public class FirstGameFriendActivity extends AppCompatActivity {
 
         friendReplies = intent.getStringArrayListExtra("KEY_MY_FRIEND_REPLIES");
 
+        whoseAsking = findViewById(R.id.whoseAsking);
         questionView = findViewById(R.id.questionView);
         answerButton1 = findViewById(R.id.answerButton1);
         answerButton2 = findViewById(R.id.answerButton2);
@@ -196,6 +198,7 @@ public class FirstGameFriendActivity extends AppCompatActivity {
                         answerButton3.setClickable(true);
                         answerButton4.setClickable(true);
 
+                        whoseAsking.setText(R.string.select_answer);
                         showQuestion(friendQuestion);
                         friendQuestion++;
                     }
