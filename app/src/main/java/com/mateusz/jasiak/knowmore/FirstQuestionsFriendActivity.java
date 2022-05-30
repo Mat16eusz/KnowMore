@@ -19,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FirstGameFriendActivity extends AppCompatActivity {
+public class FirstQuestionsFriendActivity extends AppCompatActivity {
 
     private ArrayList<String> positions = new ArrayList<>(); //TODO: Pobierać dla konkretnej pary z bazy danych
     private ArrayList<Integer> myMarkedAnswer = new ArrayList<>();
@@ -59,7 +59,7 @@ public class FirstGameFriendActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first_game_friend);
+        setContentView(R.layout.activity_first_questions_friend);
 
         Intent intent = getIntent();
         myIdSocialMedia = intent.getStringExtra("KEY_MY_ID_SOCIAL_MEDIA");
@@ -211,8 +211,8 @@ public class FirstGameFriendActivity extends AppCompatActivity {
                 } else {
                     friendMarkedAnswer.add(markedAnswer);
                     updateCurrentQuestion();
-                    Intent intent = new Intent(FirstGameFriendActivity.this, MainActivity.class);
-                    FirstGameFriendActivity.this.startActivity(intent);
+                    Intent intent = new Intent(FirstQuestionsFriendActivity.this, MainActivity.class);
+                    FirstQuestionsFriendActivity.this.startActivity(intent);
                 }
             }
         }

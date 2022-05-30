@@ -22,12 +22,16 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FirstGameFriendActivity"
+            android:name=".FirstQuestionsFriendActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".QuestionsActivity"
             android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".QuestionsFriendActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".StartActivity"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorTheme"
     android:orientation="vertical"
-    tools:context=".FirstGameFriendActivity">
+    tools:context=".FirstQuestionsFriendActivity">
 
     <TextView
         android:id="@+id/whoseAsking"

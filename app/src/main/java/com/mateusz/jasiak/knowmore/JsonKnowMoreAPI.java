@@ -11,8 +11,8 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface JsonKnowMoreAPI {
-    String BASE_URL = "http://10.0.2.2:3000/";             // localhost
-    //String BASE_URL = "https://know-more-mj.herokuapp.com/"; // Heroku
+    //String BASE_URL = "http://10.0.2.2:3000/";             // localhost
+    String BASE_URL = "https://know-more-mj.herokuapp.com/"; // Heroku
 
     @GET("players")
     Call<List<PlayersDataAPI>> getPlayersData();
