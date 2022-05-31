@@ -38,6 +38,7 @@ public class QuestionsActivity extends AppCompatActivity {
     private boolean checkTheAnswers = true;
     private int markedAnswer = 0;
 
+    private String friendToken;
     private String myIdSocialMedia;
     private String friendIdSocialMedia;
 
@@ -93,6 +94,8 @@ public class QuestionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questions);
 
         Intent intent = getIntent();
+        friendToken = intent.getStringExtra("KEY_FRIEND_TOKEN");
+
         myIdSocialMedia = intent.getStringExtra("KEY_MY_ID_SOCIAL_MEDIA");
         friendIdSocialMedia = intent.getStringExtra("KEY_FRIEND_ID_SOCIAL_MEDIA");
         idQuestions = intent.getIntegerArrayListExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS");
@@ -388,6 +391,7 @@ public class QuestionsActivity extends AppCompatActivity {
                 } else {
                     localFriendMarkedAnswer.add(markedAnswer);
                     updateCurrentQuestion();
+                    sendNotificationToPlayer();
                     Intent intent = new Intent(QuestionsActivity.this, MainActivity.class);
                     QuestionsActivity.this.startActivity(intent);
                 }
@@ -582,5 +586,11 @@ public class QuestionsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void sendNotificationToPlayer() {
+        FCMNotificationSend FCMNotificationSend = new FCMNotificationSend(friendToken,
+                getResources().getString(R.string.your_turn_notification), getApplicationContext(), QuestionsActivity.this);
+        FCMNotificationSend.SendNotifications();
     }
 }

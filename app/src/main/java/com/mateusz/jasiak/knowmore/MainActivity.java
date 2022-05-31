@@ -52,13 +52,14 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> players = new ArrayList<>();
 
     ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViewArrayList;
-    ArrayList<String> idSocialMediaList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PlayerFriendAdapterRecyclerView adapterRecyclerView;
     private RecyclerView.LayoutManager layoutManagerRecyclerView;
     //----------------------------------------------------------------------------------------------
     //Firebase
     private String myToken; //TODO: Sprawdzić czy lepiej z bazy danych pobierać po ID.
+    private ArrayList<String> friendToken = new ArrayList<>();
+    private ArrayList<String> idSocialMedia = new ArrayList<>();
     private String myIdSocialMedia;
     private String myName;
     private String myAvatar;
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
     //----------------------------------------------------------------------------------------------
     //Retrofit łączenie. Docelowo zamienić adres z localhost na domenę. Wyodrębnić na funkcję itp.
-    public void getPlayers() {
+    public void getPlayers() { //TODO: Zabezpieczyć gdy kolekcja jest pusta.
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
         Call<List<PlayersDataAPI>> call = jsonKnowMoreAPI.getPlayersData();
@@ -190,6 +191,9 @@ public class MainActivity extends AppCompatActivity {
 
                     for (PlayersDataAPI playersDataAPI : playersDataAPIs) {
                         players.add(playersDataAPI.getName() + "#" + playersDataAPI.getIdSocialMedia() + "#" + playersDataAPI.getPersonPhoto() + "#" + playersDataAPI.getToken());
+
+                        friendToken.add(playersDataAPI.getToken());
+                        idSocialMedia.add(playersDataAPI.getIdSocialMedia());
 
                         if (myIdSocialMedia.equals(playersDataAPI.getIdSocialMedia())) {
                             myName = playersDataAPI.getName();
@@ -222,8 +226,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 String friendIdSocialMedia = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.idSocialMediaRecyclerView)).getText().toString();
+                String localFriendToken = "";
                 boolean orFirstGame = true;
                 boolean orYourTurn = false;
+
+                for (int i = 0; i < idSocialMedia.size(); i++) {
+                    if (idSocialMedia.get(i).equals(friendIdSocialMedia)) {
+                        localFriendToken = friendToken.get(i);
+                        break;
+                    }
+                }
 
                 for (int i = 0; i < whoseTurn.size(); i++) {
                     if (whoseTurn.get(i).equals(friendIdSocialMedia) && whoseTurnFriendIdSocialMedia.get(i).equals(myIdSocialMedia) && initializationGame.get(i).equals(myIdSocialMedia) && gameProper.get(i)) {
@@ -232,6 +244,8 @@ public class MainActivity extends AppCompatActivity {
                         orYourTurn = true;
 
                         Intent intent = new Intent(MainActivity.this, QuestionsActivity.class);
+                        intent.putExtra("KEY_FRIEND_TOKEN", localFriendToken);
+
                         intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
@@ -262,6 +276,8 @@ public class MainActivity extends AppCompatActivity {
                         orYourTurn = true;
 
                         Intent intent = new Intent(MainActivity.this, QuestionsFriendActivity.class);
+                        intent.putExtra("KEY_FRIEND_TOKEN", localFriendToken);
+
                         intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
@@ -291,6 +307,8 @@ public class MainActivity extends AppCompatActivity {
                         orYourTurn = true;
 
                         Intent intent = new Intent(MainActivity.this, FirstQuestionsFriendActivity.class);
+                        intent.putExtra("KEY_FRIEND_TOKEN", localFriendToken);
+
                         intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
                         intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
@@ -315,6 +333,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (orFirstGame) {
                     Intent intent = new Intent(MainActivity.this, FirstQuestionsActivity.class);
+                    intent.putExtra("KEY_FRIEND_TOKEN", localFriendToken);
+
                     intent.putExtra("KEY_MY_ID_SOCIAL_MEDIA", myIdSocialMedia);
                     intent.putExtra("KEY_FRIEND_ID_SOCIAL_MEDIA", friendIdSocialMedia);
                     intent.putExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS", idQuestions);
@@ -397,7 +417,6 @@ public class MainActivity extends AppCompatActivity {
     private void insertItem(String idSocialMedia, String name, String avatar) {
         playerFriendRecyclerViewArrayList.add(new PlayerFriendRecyclerView(idSocialMedia, name, avatar));
         adapterRecyclerView.notifyItemInserted(playerFriendRecyclerViewArrayList.size());
-        idSocialMediaList.add(idSocialMedia);
 
         saveData();
     }

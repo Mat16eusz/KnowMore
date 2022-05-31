@@ -38,6 +38,7 @@ public class QuestionsFriendActivity extends AppCompatActivity {
     private boolean checkTheAnswers = true;
     private int markedAnswer = 0;
 
+    private String friendToken;
     private String myIdSocialMedia;
     private String friendIdSocialMedia;
 
@@ -93,6 +94,8 @@ public class QuestionsFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questions_friend);
 
         Intent intent = getIntent();
+        friendToken = intent.getStringExtra("KEY_FRIEND_TOKEN");
+
         myIdSocialMedia = intent.getStringExtra("KEY_MY_ID_SOCIAL_MEDIA");
         friendIdSocialMedia = intent.getStringExtra("KEY_FRIEND_ID_SOCIAL_MEDIA");
         idQuestions = intent.getIntegerArrayListExtra("KEY_FRIEND_ID_SOCIAL_ID_QUESTIONS");
@@ -385,11 +388,11 @@ public class QuestionsFriendActivity extends AppCompatActivity {
                 if (friendQuestion != 3) {
                     localFriendMarkedAnswer.add(markedAnswer);
                     friendQuestion++;
-                    //getQuestion();
                     showQuestion(friendQuestion, localFriendReplies);
                 } else {
                     localFriendMarkedAnswer.add(markedAnswer);
                     updateCurrentQuestion();
+                    sendNotificationToPlayer();
                     Intent intent = new Intent(QuestionsFriendActivity.this, MainActivity.class);
                     QuestionsFriendActivity.this.startActivity(intent);
                 }
@@ -494,36 +497,6 @@ public class QuestionsFriendActivity extends AppCompatActivity {
     private void updateCurrentQuestion() {
         JsonKnowMoreAPI jsonKnowMoreAPI = getClient().create(JsonKnowMoreAPI.class);
 
-        /*ArrayList<String> friendAnswerOneEN = new ArrayList<>();
-        friendAnswerOneEN.add(copyAnswerOneEN.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOneEN.add(copyAnswerTwoEN.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOneEN.add(copyAnswerThreeEN.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOneEN.add(copyAnswerFourEN.get(Integer.parseInt(positions.get(0))));
-        ArrayList<String> friendAnswerOnePL = new ArrayList<>();
-        friendAnswerOnePL.add(copyAnswerOnePL.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOnePL.add(copyAnswerTwoPL.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOnePL.add(copyAnswerThreePL.get(Integer.parseInt(positions.get(0))));
-        friendAnswerOnePL.add(copyAnswerFourPL.get(Integer.parseInt(positions.get(0))));
-        ArrayList<String> friendAnswerTwoEN = new ArrayList<>();
-        friendAnswerTwoEN.add(copyAnswerOneEN.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoEN.add(copyAnswerTwoEN.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoEN.add(copyAnswerThreeEN.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoEN.add(copyAnswerFourEN.get(Integer.parseInt(positions.get(1))));
-        ArrayList<String> friendAnswerTwoPL = new ArrayList<>();
-        friendAnswerTwoPL.add(copyAnswerOnePL.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoPL.add(copyAnswerTwoPL.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoPL.add(copyAnswerThreePL.get(Integer.parseInt(positions.get(1))));
-        friendAnswerTwoPL.add(copyAnswerFourPL.get(Integer.parseInt(positions.get(1))));
-        ArrayList<String> friendAnswerThreeEN = new ArrayList<>();
-        friendAnswerThreeEN.add(copyAnswerOneEN.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreeEN.add(copyAnswerTwoEN.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreeEN.add(copyAnswerThreeEN.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreeEN.add(copyAnswerFourEN.get(Integer.parseInt(positions.get(2))));
-        ArrayList<String> friendAnswerThreePL = new ArrayList<>();
-        friendAnswerThreePL.add(copyAnswerOnePL.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreePL.add(copyAnswerTwoPL.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreePL.add(copyAnswerThreePL.get(Integer.parseInt(positions.get(2))));
-        friendAnswerThreePL.add(copyAnswerFourPL.get(Integer.parseInt(positions.get(2))));*/
         ArrayList<String> friendAnswerOneEN = new ArrayList<>();
         friendAnswerOneEN.add(answerOneEN.get(Integer.parseInt(localFriendReplies.get(0))));
         friendAnswerOneEN.add(answerTwoEN.get(Integer.parseInt(localFriendReplies.get(0))));
@@ -568,5 +541,11 @@ public class QuestionsFriendActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void sendNotificationToPlayer() {
+        FCMNotificationSend FCMNotificationSend = new FCMNotificationSend(friendToken,
+                getResources().getString(R.string.your_turn_notification), getApplicationContext(), QuestionsFriendActivity.this);
+        FCMNotificationSend.SendNotifications();
     }
 }
