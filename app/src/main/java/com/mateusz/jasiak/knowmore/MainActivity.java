@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
@@ -115,14 +114,66 @@ public class MainActivity extends AppCompatActivity {
 
         //------------------------------------------------------------------------------------------
         //Rozwijana lista z graczami
-        getPlayers(); //TODO: Zrobić odświeżanie.
+        getPlayers();
         //Otrzymanie zaproszeń
-        getInvitations(); //TODO: Zrobić odświeżanie i zabezpieczenie przed sytuacją, że ktoś usuwa dane aplikacji i wyślę się jeszcze raz.
-        getQuestions(); //TODO: Zrobić odświeżanie.
-        getWhoIsTurn(); //TODO: Zrobić odświeżanie.
-        getCurrentQuestion(); //TODO: Zrobić odświeżanie.
-        getMyAndFriendCurrentQuestion(); //TODO: Zrobić odświeżanie.
-        getMarkedAnswer(); //TODO: Zrobić odświeżanie.
+        getInvitations(); //TODO: Zabezpieczenie przed sytuacją, że ktoś usuwa dane aplikacji i wyślę się jeszcze raz.
+        getQuestions();
+        getWhoIsTurn();
+        getCurrentQuestion();
+        getMyAndFriendCurrentQuestion();
+        getMarkedAnswer();
+
+        Thread refresh = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(10000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                players.clear();
+                                idQuestions.clear();
+                                questionsEN.clear();
+                                answerOneEN.clear();
+                                answerTwoEN.clear();
+                                answerThreeEN.clear();
+                                answerFourEN.clear();
+                                questionsPL.clear();
+                                answerOnePL.clear();
+                                answerTwoPL.clear();
+                                answerThreePL.clear();
+                                answerFourPL.clear();
+                                whoseTurn.clear();
+                                whoseTurnFriendIdSocialMedia.clear();
+                                initializationGame.clear();
+                                gameProper.clear();
+                                myReplies.clear();
+                                myFriendReplies.clear();
+                                friendReplies.clear();
+                                selectedQuestions.clear();
+                                myMarkedAnswer.clear();
+                                myFriendMarkedAnswer.clear();
+                                friendMarkedAnswer.clear();
+
+                                getPlayers();
+                                //Otrzymanie zaproszeń
+                                getInvitations(); //TODO: Zabezpieczenie przed sytuacją, że ktoś usuwa dane aplikacji i wyślę się jeszcze raz.
+                                getQuestions();
+                                getWhoIsTurn();
+                                getCurrentQuestion();
+                                getMyAndFriendCurrentQuestion();
+                                getMarkedAnswer();
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+
+                }
+            }
+        };
+        refresh.start();
 
         //TODO: Po dodaniu ustawić listę na pusty string.
         //TODO: Od znaku # ukryć tekst w prawo.
@@ -132,12 +183,12 @@ public class MainActivity extends AppCompatActivity {
 
         autoCompleteTextView.setAdapter(arrayAdapter);
 
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
                 int index = players.indexOf(autoCompleteTextView.getText().toString());
             }
-        });
+        });*/ //TODO: Do usunięcia. Pozycja kliknietego elementu z rozwijanej listy.
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         buildRecyclerView();
