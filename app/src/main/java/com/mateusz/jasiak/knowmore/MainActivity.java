@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
@@ -130,6 +131,14 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, players);
 
         autoCompleteTextView.setAdapter(arrayAdapter);
+
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
+                int index = players.indexOf(autoCompleteTextView.getText().toString());
+            }
+        });
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         buildRecyclerView();
     }
@@ -372,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (!autoCompleteTextView.getText().toString().equals("")) {
                 text = autoCompleteTextView.getText().toString();
+                autoCompleteTextView.setText("");
                 while (!(text.charAt(i) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
                     i++;
                 }
@@ -409,6 +419,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
+            autoCompleteTextView.setText("");
             Log.e("Add player to list friends", e.getMessage());
             Toast.makeText(MainActivity.this, R.string.wrong_name, Toast.LENGTH_LONG).show();
         }

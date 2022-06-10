@@ -14,7 +14,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -183,7 +182,7 @@ public class QuestionsFriendActivity extends AppCompatActivity {
         }
 
         showQuestion(0, localMyReplies);
-        showSelectedAnswers(0, intentMyMarkedAnswer, intentMyFriendMarkedAnswer);
+        showSelectedAnswers(0, intentFriendMarkedAnswer, intentMyFriendMarkedAnswer);
 
         int delayMillis = 2000;
 
@@ -195,7 +194,7 @@ public class QuestionsFriendActivity extends AppCompatActivity {
                 answerButton3.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 answerButton4.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 showQuestion(2, localMyReplies);
-                showSelectedAnswers(1, intentMyMarkedAnswer, intentMyFriendMarkedAnswer);
+                showSelectedAnswers(1, intentFriendMarkedAnswer, intentMyFriendMarkedAnswer);
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -205,7 +204,7 @@ public class QuestionsFriendActivity extends AppCompatActivity {
                         answerButton3.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         answerButton4.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         showQuestion(4, localMyReplies);
-                        showSelectedAnswers(2, intentMyMarkedAnswer, intentMyFriendMarkedAnswer);
+                        showSelectedAnswers(2, intentFriendMarkedAnswer, intentMyFriendMarkedAnswer);
 
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -273,7 +272,7 @@ public class QuestionsFriendActivity extends AppCompatActivity {
         if (endOfAnswer) {
             showQuestions(1);
             if (checkTheAnswers) {
-                showSelectedAnswers(markedAnswer, localMyFriendMarkedAnswer, intentFriendMarkedAnswer);
+                showSelectedAnswers(markedAnswer, localMyFriendMarkedAnswer, intentMyMarkedAnswer);
                 markedAnswer++;
                 answerButton1.setClickable(false);
                 answerButton2.setClickable(false);
@@ -290,7 +289,7 @@ public class QuestionsFriendActivity extends AppCompatActivity {
         if (endOfAnswer) {
             showQuestions(2);
             if (checkTheAnswers) {
-                showSelectedAnswers(markedAnswer, localMyFriendMarkedAnswer, intentFriendMarkedAnswer);
+                showSelectedAnswers(markedAnswer, localMyFriendMarkedAnswer, intentMyMarkedAnswer);
                 markedAnswer++;
                 answerButton1.setClickable(false);
                 answerButton2.setClickable(false);
@@ -307,7 +306,7 @@ public class QuestionsFriendActivity extends AppCompatActivity {
         if (endOfAnswer) {
             showQuestions(3);
             if (checkTheAnswers) {
-                showSelectedAnswers(markedAnswer, localMyFriendMarkedAnswer, intentFriendMarkedAnswer);
+                showSelectedAnswers(markedAnswer, localMyFriendMarkedAnswer, intentMyMarkedAnswer);
                 markedAnswer++;
                 answerButton1.setClickable(false);
                 answerButton2.setClickable(false);
@@ -324,7 +323,7 @@ public class QuestionsFriendActivity extends AppCompatActivity {
         if (endOfAnswer) {
             showQuestions(4);
             if (checkTheAnswers) {
-                showSelectedAnswers(markedAnswer, localMyFriendMarkedAnswer, intentFriendMarkedAnswer);
+                showSelectedAnswers(markedAnswer, localMyFriendMarkedAnswer, intentMyMarkedAnswer);
                 markedAnswer++;
                 answerButton1.setClickable(false);
                 answerButton2.setClickable(false);
@@ -379,7 +378,6 @@ public class QuestionsFriendActivity extends AppCompatActivity {
                         answerButton4.setClickable(true);
 
                         whoseAsking.setText(R.string.select_answer);
-                        //getQuestion();
                         showQuestion(friendQuestion, localFriendReplies);
                         friendQuestion++;
                     }
@@ -387,8 +385,8 @@ public class QuestionsFriendActivity extends AppCompatActivity {
             } else {
                 if (friendQuestion != 3) {
                     localFriendMarkedAnswer.add(markedAnswer);
+                    showQuestion(friendQuestion + friendQuestion, localFriendReplies);
                     friendQuestion++;
-                    showQuestion(friendQuestion, localFriendReplies);
                 } else {
                     localFriendMarkedAnswer.add(markedAnswer);
                     updateCurrentQuestion();
@@ -528,7 +526,26 @@ public class QuestionsFriendActivity extends AppCompatActivity {
         friendAnswerThreePL.add(answerThreePL.get(Integer.parseInt(localFriendReplies.get(4))));
         friendAnswerThreePL.add(answerFourPL.get(Integer.parseInt(localFriendReplies.get(4))));
 
-        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, myIdSocialMedia, friendIdSocialMedia, true, selectedQuestions, /*M1*/ Integer.parseInt(localFriendReplies.get(0)), questionsEN.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOneEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOnePL, intentMyMarkedAnswer.get(0), intentMyFriendMarkedAnswer.get(0), /*M2*/ Integer.parseInt(localFriendReplies.get(1)), questionsEN.get(Integer.parseInt(localFriendReplies.get(1))), myAnswerTwoEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(1))), myAnswerTwoPL, intentMyMarkedAnswer.get(1), intentMyFriendMarkedAnswer.get(1), /*M3*/ Integer.parseInt(localFriendReplies.get(2)), questionsEN.get(Integer.parseInt(localFriendReplies.get(2))), myAnswerThreeEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(2))), myAnswerThreePL, intentMyMarkedAnswer.get(2), intentMyFriendMarkedAnswer.get(2), /*F1*/ idQuestions.get(Integer.parseInt(localFriendReplies.get(0))), questionsEN.get(Integer.parseInt(localFriendReplies.get(0))), friendAnswerOneEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(0))), friendAnswerOnePL, intentFriendMarkedAnswer.get(0), /*F2*/ idQuestions.get(Integer.parseInt(localFriendReplies.get(2))), questionsEN.get(Integer.parseInt(localFriendReplies.get(2))), friendAnswerTwoEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(2))), friendAnswerTwoPL, intentFriendMarkedAnswer.get(1), /*F3*/ idQuestions.get(Integer.parseInt(localFriendReplies.get(4))), questionsEN.get(Integer.parseInt(localFriendReplies.get(4))), friendAnswerThreeEN, questionsPL.get(Integer.parseInt(localFriendReplies.get(4))), friendAnswerThreePL, intentFriendMarkedAnswer.get(2));
+        CurrentQuestionsAPI currentQuestionsAPI = new CurrentQuestionsAPI(friendIdSocialMedia, myIdSocialMedia, friendIdSocialMedia,
+                true, selectedQuestions, /*M1*/ Integer.parseInt(localFriendReplies.get(0)),
+                questionsEN.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOneEN,
+                questionsPL.get(Integer.parseInt(localFriendReplies.get(0))), myAnswerOnePL, intentMyMarkedAnswer.get(0),
+                localMyFriendMarkedAnswer.get(0), /*M2*/ Integer.parseInt(localFriendReplies.get(1)),
+                questionsEN.get(Integer.parseInt(localFriendReplies.get(1))), myAnswerTwoEN,
+                questionsPL.get(Integer.parseInt(localFriendReplies.get(1))), myAnswerTwoPL, intentMyMarkedAnswer.get(1),
+                localMyFriendMarkedAnswer.get(1), /*M3*/ Integer.parseInt(localFriendReplies.get(2)),
+                questionsEN.get(Integer.parseInt(localFriendReplies.get(2))), myAnswerThreeEN,
+                questionsPL.get(Integer.parseInt(localFriendReplies.get(2))), myAnswerThreePL, intentMyMarkedAnswer.get(2),
+                localMyFriendMarkedAnswer.get(2), /*F1*/ idQuestions.get(Integer.parseInt(localFriendReplies.get(0))),
+                questionsEN.get(Integer.parseInt(localFriendReplies.get(0))), friendAnswerOneEN,
+                questionsPL.get(Integer.parseInt(localFriendReplies.get(0))), friendAnswerOnePL,
+                localFriendMarkedAnswer.get(0), /*F2*/ idQuestions.get(Integer.parseInt(localFriendReplies.get(2))),
+                questionsEN.get(Integer.parseInt(localFriendReplies.get(2))), friendAnswerTwoEN,
+                questionsPL.get(Integer.parseInt(localFriendReplies.get(2))), friendAnswerTwoPL,
+                localFriendMarkedAnswer.get(1), /*F3*/ idQuestions.get(Integer.parseInt(localFriendReplies.get(4))),
+                questionsEN.get(Integer.parseInt(localFriendReplies.get(4))), friendAnswerThreeEN,
+                questionsPL.get(Integer.parseInt(localFriendReplies.get(4))), friendAnswerThreePL, localFriendMarkedAnswer.get(2));
+
         Call<CurrentQuestionsAPI> call = jsonKnowMoreAPI.updateCurrentQuestion(idCurrentQuestion, currentQuestionsAPI);
         call.enqueue(new Callback<CurrentQuestionsAPI>() {
             @Override
