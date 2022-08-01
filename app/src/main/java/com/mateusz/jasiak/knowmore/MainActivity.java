@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                             myAvatar = playersDataAPI.getPersonPhoto();
 
                             TextView myNick = findViewById(R.id.myNick);
-                            myNick.setText(myName + "#" + myIdSocialMedia.substring(0, 4));
+                            myNick.setText("Nick: " + myName + "#" + myIdSocialMedia.substring(0, 4));
                         }
                     }
                 }
