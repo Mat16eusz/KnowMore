@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
@@ -49,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Dodać moduł usuwania użytkonika z listy po potwierdzeniu (eliminacja missclicku).
     //TODO: Odśiweżanie listy (pullToRefresh i może coś automatycznego).
     AutoCompleteTextView autoCompleteTextView;
+    int indexWithPlayers;
     ArrayList<String> players = new ArrayList<>();
+    ArrayList<String> playersAutoCompleteTextView = new ArrayList<>();
 
     ArrayList<PlayerFriendRecyclerView> playerFriendRecyclerViewArrayList;
     private RecyclerView recyclerView;
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 players.clear();
+                                playersAutoCompleteTextView.clear();
                                 idQuestions.clear();
                                 questionsEN.clear();
                                 answerOneEN.clear();
@@ -175,20 +179,20 @@ public class MainActivity extends AppCompatActivity {
         };
         refresh.start();
 
-        //TODO: Po dodaniu ustawić listę na pusty string.
-        //TODO: Od znaku # ukryć tekst w prawo.
+        //AutoCompleteTextView
+        //------------------------------------------------------------------------------------------
         autoCompleteTextView = findViewById(R.id.editTextTextPersonName);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, players);
+                android.R.layout.simple_list_item_1, playersAutoCompleteTextView);
 
         autoCompleteTextView.setAdapter(arrayAdapter);
 
-        /*autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
-                int index = players.indexOf(autoCompleteTextView.getText().toString());
+                indexWithPlayers = playersAutoCompleteTextView.indexOf(autoCompleteTextView.getText().toString());
             }
-        });*/ //TODO: Do usunięcia. Pozycja kliknietego elementu z rozwijanej listy.
+        });
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         buildRecyclerView();
@@ -251,6 +255,9 @@ public class MainActivity extends AppCompatActivity {
 
                     for (PlayersDataAPI playersDataAPI : playersDataAPIs) {
                         players.add(playersDataAPI.getName() + "#" + playersDataAPI.getIdSocialMedia() + "#" + playersDataAPI.getPersonPhoto() + "#" + playersDataAPI.getToken());
+                        String id = playersDataAPI.getIdSocialMedia();
+                        id = id.substring(0, 4);
+                        playersAutoCompleteTextView.add(playersDataAPI.getName() + "#" + id);
 
                         friendToken.add(playersDataAPI.getToken());
                         idSocialMedia.add(playersDataAPI.getIdSocialMedia());
@@ -258,6 +265,9 @@ public class MainActivity extends AppCompatActivity {
                         if (myIdSocialMedia.equals(playersDataAPI.getIdSocialMedia())) {
                             myName = playersDataAPI.getName();
                             myAvatar = playersDataAPI.getPersonPhoto();
+
+                            TextView myNick = findViewById(R.id.myNick);
+                            myNick.setText(myName + "#" + myIdSocialMedia.substring(0, 4));
                         }
                     }
                 }
@@ -431,7 +441,7 @@ public class MainActivity extends AppCompatActivity {
             int counterIdSocialMedia = 0;
 
             if (!autoCompleteTextView.getText().toString().equals("")) {
-                text = autoCompleteTextView.getText().toString();
+                text = players.get(indexWithPlayers);
                 autoCompleteTextView.setText("");
                 while (!(text.charAt(i) == '#')) { //TODO: Zabezpieczyć jak nie będzie zanku "#"
                     i++;
@@ -450,6 +460,12 @@ public class MainActivity extends AppCompatActivity {
 
                 textLength = text.length();
                 friendToken = text.substring(k + 1, textLength);
+
+                if (myIdSocialMedia.equals(idSocialMedia)) {
+                    Toast.makeText(MainActivity.this, getText(R.string.add_yourself), Toast.LENGTH_LONG).show();
+
+                    return;
+                }
 
                 if (playerFriendRecyclerViewArrayList.size() == 0) {
                     insertItem(idSocialMedia, name, avatar);

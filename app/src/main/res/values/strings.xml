@@ -17,4 +17,5 @@
     <string name="guess">Guess your friend\'s answer!</string>
     <string name="was_he_answered_correctly">A friend replied to your answer:</string>
     <string name="your_turn_notification">The friend made a move. Your turn!</string>
+    <string name="add_yourself">You can\'t add yourself!</string>
 </resources>

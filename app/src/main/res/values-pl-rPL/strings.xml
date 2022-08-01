@@ -18,4 +18,5 @@
     <string name="guess">Zgadnij odpowiedź przyjaciela!</string>
     <string name="was_he_answered_correctly">Przyjaciel odpowiedział na Twoją odpowiedź:</string>
     <string name="your_turn_notification">Przyjaciel wykonał ruch. Twoja kolej!</string>
+    <string name="add_yourself">Nie można dodać samego siebie!</string>
 </resources>
